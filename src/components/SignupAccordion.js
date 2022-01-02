@@ -54,7 +54,9 @@ const SignupAccordion = () => {
     try {
       const verifySignupResponse = await verifySignup(email, name, verificationCode);
 
-      alert(verifySignupResponse.data);
+      // Store auth and refresh tokens in local storage
+      localStorage.setItem("inspiration_v2_auth_token", verifySignupResponse.data.auth);
+      localStorage.setItem("inspiration_v2_refresh_token", verifySignupResponse.data.refresh);
     } catch (err) {
       // If the response property is defined, then there was an error with the server
       if (err.response) {
