@@ -8,11 +8,14 @@ import {
 } from "@mui/material";
 import { ExpandMore } from "@mui/icons-material";
 
-const GuestAccordion = () => {
+const GuestAccordion = ({ setIsLoggedIn }) => {
   const continueAsGuest = () => {
     // Set auth and refresh tokens in local storage to "guest"
     localStorage.setItem("inspiration_v2_auth_token", "guest");
     localStorage.setItem("inspiration_v2_refresh_token", "guest");
+
+      // Set user as logged in so that main page will render
+      setIsLoggedIn(true);
   }
 
   return (

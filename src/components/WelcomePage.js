@@ -10,7 +10,7 @@ const useStyles = makeStyles({
   }
 });
 
-const WelcomePage = () => {
+const WelcomePage = ({ setIsLoggedIn }) => {
   const classes = useStyles();
 
   return (
@@ -30,11 +30,11 @@ const WelcomePage = () => {
           <Stack spacing={3}>
             <Typography variant="h2">Welcome</Typography>
 
-            <LoginAccordion />
+            <LoginAccordion setIsLoggedIn={setIsLoggedIn} />
 
-            <SignupAccordion />
+            <SignupAccordion setIsLoggedIn={setIsLoggedIn} />
 
-            <GuestAccordion />
+            <GuestAccordion setIsLoggedIn={setIsLoggedIn} />
           </Stack>
         </Grid>
       </Grid>
