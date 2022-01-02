@@ -2,19 +2,52 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Grid,
+  Stack,
   TextField,
-  Typography
+  Button,
+  Typography,
+  Tooltip,
+  IconButton
 } from "@mui/material";
+import { ExpandMore, Security } from "@mui/icons-material";
 
 const SignupAccordion = () => {
   return (
     <Accordion>
-      <AccordionSummary>
+      <AccordionSummary expandIcon={<ExpandMore />}>
         <Typography>Signup</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <TextField fullWidth label="Email" helperText="Your email will only be used for verifying actions like signup, logins, etc." />
-        <TextField fullWidth label="Name" helperText="This doesn't have to be your legal name, just whatever you would like to be called (you can always change this later)." />
+        <Stack spacing={3}>
+          <Typography>Enter your email address and we'll send you an email with a verification code.</Typography>
+          <Grid container>
+            <Grid item xs={11}>
+              <TextField fullWidth label="Email" helperText="Your email will only be used for verifying actions like signup, logins, etc." />
+            </Grid>
+            <Grid item xs={1}>
+              <Tooltip
+                title={
+                  <>
+                    <Typography variant="h4">No password?</Typography>
+                    <Typography variant="body1">
+                      Instead of using a password to access your account, you will be sent an email with a verification code whenever you log in.
+                    </Typography>
+                    <Typography variant="caption">
+                      Don't worry, you wont have to log in every time you use this website. However, you will be required to log in every 30 days.
+                    </Typography>
+                  </>
+                }
+              >
+                <IconButton>
+                  <Security />
+                </IconButton>
+              </Tooltip>
+            </Grid>
+          </Grid>
+          <TextField fullWidth label="Name" helperText="This doesn't have to be your legal name, just whatever you would like to be called (you can always change this later)." />
+          <Button fullWidth variant="contained" color="primary">Send</Button>
+        </Stack>
       </AccordionDetails>
     </Accordion>
   );
