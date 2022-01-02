@@ -9,7 +9,7 @@ const verifySignup = async (email, name, verificationCode) => {
             verificationCode: verificationCode
         }
     );
-    console.log(res);
+
     return res;
 }
 

@@ -5,7 +5,7 @@ const signup = async (email) => {
         "/signup",
         { email: email }
     );
-    console.log(res);
+
     return res;
 }
 
