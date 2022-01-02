@@ -11,8 +11,60 @@ import {
   IconButton
 } from "@mui/material";
 import { ExpandMore, Security, Info } from "@mui/icons-material";
+import { useState } from "react";
+import signup from "../api/signup";
+import verifySignup from "../api/verifySignup";
 
 const SignupAccordion = () => {
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [waitingForVerification, setWaitingForVerification] = useState(false);
+  const [verificationCode, setVerificationCode] = useState("");
+
+  const handleEmailInput = (event) => {
+    setEmail(event.target.value);
+  }
+
+  const handleNameInput = (event) => {
+    setName(event.target.value);
+  }
+
+  const handleVerificationCodeInput = (event) => {
+    setVerificationCode(event.target.value);
+  }
+
+  const handleSignupRequest = async () => {
+    try {
+      const signupResponse = await signup(email);
+
+      alert(signupResponse.data);
+
+      setWaitingForVerification(true);
+    } catch (err) {
+      // If the response property is defined, then there was an error with the server
+      if (err.response) {
+        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
+      } else {
+        alert(`ERROR: ${err}`);
+      }
+    }
+  }
+
+  const handleVerifySignupRequest = async () => {
+    try {
+      const verifySignupResponse = await verifySignup(email, name, verificationCode);
+
+      alert(verifySignupResponse.data);
+    } catch (err) {
+      // If the response property is defined, then there was an error with the server
+      if (err.response) {
+        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
+      } else {
+        alert(`ERROR: ${err}`);
+      }
+    }
+  }
+
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMore />}>
@@ -23,7 +75,13 @@ const SignupAccordion = () => {
           <Typography>Enter your email address and we'll send you an email with a verification code.</Typography>
           <Grid container>
             <Grid item xs={11}>
-              <TextField fullWidth label="Email" helperText="Your email will only be used for verifying actions like signup, logins, etc." />
+              <TextField
+                fullWidth
+                label="Email"
+                helperText="Your email will only be used for verifying actions like signup, logins, etc."
+                value={email}
+                onChange={handleEmailInput}
+              />
             </Grid>
             <Grid item xs={1}>
               <Tooltip
@@ -47,7 +105,13 @@ const SignupAccordion = () => {
           </Grid>
           <Grid container>
             <Grid item xs={11}>
-              <TextField fullWidth label="Name" helperText="This doesn't have to be your legal name, just whatever you would like to be called (you can always change this later)." />
+              <TextField
+                fullWidth
+                label="Name"
+                helperText="This doesn't have to be your legal name, just whatever you would like to be called (you can always change this later)."
+                value={name}
+                onChange={handleNameInput}
+              />
             </Grid>
             <Grid item xs={1}>
               <Tooltip
@@ -66,7 +130,24 @@ const SignupAccordion = () => {
               </Tooltip>
             </Grid>
           </Grid>
-          <Button fullWidth variant="contained" color="primary">Send</Button>
+          <Button fullWidth variant="contained" color="primary" onClick={handleSignupRequest}>Signup</Button>
+          {
+            waitingForVerification
+            ? (
+              <>
+                <Typography variant="h5">Verification Code</Typography>
+                <Typography>We sent a 6-digit verification code to {email}</Typography>
+                <TextField
+                  fullWidth
+                  label="Verification Code"
+                  value={verificationCode}
+                  onChange={handleVerificationCodeInput}
+                />
+                <Button fullWidth variant="contained" color="primary" onClick={handleVerifySignupRequest}>Verify</Button>
+              </>
+            )
+            : <></>
+          }
         </Stack>
       </AccordionDetails>
     </Accordion>
