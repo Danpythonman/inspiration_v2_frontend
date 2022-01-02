@@ -6,7 +6,7 @@ import GuestAccordion from "./GuestAccordion";
 
 const useStyles = makeStyles({
   centeredContent: {
-    minHeight: '100vh'
+    minHeight: "100vh"
   }
 });
 
@@ -27,14 +27,14 @@ const WelcomePage = () => {
         justifyContent="center"
       >
         <Grid item xs={6}>
-          <Stack spacing={2}>
-          <Typography variant="h2">Welcome</Typography>
+          <Stack spacing={3}>
+            <Typography variant="h2">Welcome</Typography>
 
-          <LoginAccordion />
+            <LoginAccordion />
 
-          <SignupAccordion />
+            <SignupAccordion />
 
-          <GuestAccordion />
+            <GuestAccordion />
           </Stack>
         </Grid>
       </Grid>
