@@ -10,7 +10,7 @@ import {
   Tooltip,
   IconButton
 } from "@mui/material";
-import { ExpandMore, Security } from "@mui/icons-material";
+import { ExpandMore, Security, Info } from "@mui/icons-material";
 
 const SignupAccordion = () => {
   return (
@@ -29,7 +29,7 @@ const SignupAccordion = () => {
               <Tooltip
                 title={
                   <>
-                    <Typography variant="h4">No password?</Typography>
+                    <Typography variant="h5"><strong>No password?</strong></Typography>
                     <Typography variant="body1">
                       Instead of using a password to access your account, you will be sent an email with a verification code whenever you log in.
                     </Typography>
@@ -45,7 +45,27 @@ const SignupAccordion = () => {
               </Tooltip>
             </Grid>
           </Grid>
-          <TextField fullWidth label="Name" helperText="This doesn't have to be your legal name, just whatever you would like to be called (you can always change this later)." />
+          <Grid container>
+            <Grid item xs={11}>
+              <TextField fullWidth label="Name" helperText="This doesn't have to be your legal name, just whatever you would like to be called (you can always change this later)." />
+            </Grid>
+            <Grid item xs={1}>
+              <Tooltip
+                title={
+                  <>
+                    <Typography variant="h5"><strong>What is my name used for?</strong></Typography>
+                    <Typography variant="body1">
+                      Your name is only used to to display a welcome message with your name, so it can be whatever you want.
+                    </Typography>
+                  </>
+                }
+              >
+                <IconButton>
+                  <Info />
+                </IconButton>
+              </Tooltip>
+            </Grid>
+          </Grid>
           <Button fullWidth variant="contained" color="primary">Send</Button>
         </Stack>
       </AccordionDetails>
