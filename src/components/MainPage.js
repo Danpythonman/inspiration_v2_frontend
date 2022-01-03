@@ -2,11 +2,12 @@ import {
   Typography,
   Box
 } from "@mui/material";
-import { useEffect } from "react";
+import {useState, useEffect } from "react";
 import TopAppBar from "./TopAppBar";
 import BottomAppBar from "./BottomAppBar";
 
-const MainPage = ({ imageObject, quoteObject }) => {
+const MainPage = ({ imageObject, quoteObject, user }) => {
+  const [name, setName] = useState("");
 
   useEffect(() => {
     if (imageObject) {
@@ -14,11 +15,19 @@ const MainPage = ({ imageObject, quoteObject }) => {
     }
   }, [imageObject]);
 
+  useEffect(() => {
+    if (!user) {
+      setName(JSON.parse(localStorage.getItem("inspiration_v2_user")).name);
+    } else {
+      setName(user.name);
+    }
+  }, [user]);
+
   return (
     <>
       <TopAppBar />
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
-        <Typography color="primary">Welcome</Typography>
+        <Typography color="primary">Welcome {name}</Typography>
       </Box>
       <BottomAppBar />
     </>
