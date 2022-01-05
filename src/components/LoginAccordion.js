@@ -6,8 +6,7 @@ import {
   Stack,
   TextField,
   Button,
-  Typography,
-  Divider
+  Typography
 } from "@mui/material";
 import { useState } from "react";
 import { ExpandMore } from "@mui/icons-material";

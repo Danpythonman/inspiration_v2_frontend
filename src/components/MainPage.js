@@ -1,7 +1,3 @@
-import {
-  Typography,
-  Box
-} from "@mui/material";
 import {useState, useEffect } from "react";
 import TopAppBar from "./TopAppBar";
 import MessageDisplay from "./MessageDisplay";
