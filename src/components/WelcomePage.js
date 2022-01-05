@@ -15,19 +15,21 @@ const WelcomePage = ({ logIn }) => {
 
   return (
     <Grid container>
-      <Grid item sm={2} />
+      <Grid item xs={1} sm={2} md={3} />
 
       <Grid
         className={classes.centeredContent}
         item
         container
+        xs={10}
         sm={8}
+        md={6}
         direction="column"
         alignItems="center"
         justifyContent="center"
       >
         <Grid item xs={6}>
-          <Stack spacing={3}>
+          <Stack spacing={5}>
             <Typography variant="h2">Welcome</Typography>
 
             <LoginAccordion logIn={logIn} />
@@ -39,7 +41,7 @@ const WelcomePage = ({ logIn }) => {
         </Grid>
       </Grid>
 
-      <Grid item sm={2} />
+      <Grid item xs={1} sm={2} md={3} />
     </Grid>
   );
 }
