@@ -6,11 +6,13 @@ import {
   Stack,
   TextField,
   Button,
-  Typography
+  Typography,
+  Divider
 } from "@mui/material";
 import { useState } from "react";
 import { ExpandMore } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
+import VerificationCode from "./VerificationCode";
 import login from "../api/login";
 import verifyLogin from "../api/verifyLogin";
 
@@ -29,10 +31,6 @@ const LoginAccordion = ({ logIn }) => {
 
   const handleEmailInput = (event) => {
     setEmail(event.target.value);
-  }
-
-  const handleVerificationCodeInput = (event) => {
-    setVerificationCode(event.target.value);
   }
 
   const handleLoginRequest = async () => {
@@ -68,14 +66,14 @@ const LoginAccordion = ({ logIn }) => {
   }
 
   return (
-    <Accordion>
+    <Accordion square>
       <AccordionSummary expandIcon={<ExpandMore />}>
         <Typography>Login</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Stack spacing={3}>
           <Typography>Enter your email address and we'll send you an email with a verification code.</Typography>
-          <Grid container spacing={0}>
+          <Grid container>
             <Grid item xs={0} sm={3}/>
             <Grid item xs={6} sm={4} sx={{ pr: 1 }}>
               <TextField
@@ -103,15 +101,13 @@ const LoginAccordion = ({ logIn }) => {
             waitingForVerification
             ? (
               <>
-                <Typography variant="h5">Verification Code</Typography>
-                <Typography>We sent a 6-digit verification code to {email}</Typography>
-                <TextField
-                  fullWidth
-                  label="Verification Code"
-                  value={verificationCode}
-                  onChange={handleVerificationCodeInput}
+                <br/>
+                <VerificationCode
+                  email={email}
+                  verificationCode={verificationCode}
+                  setVerificationCode={setVerificationCode}
+                  handleVerifyRequest={handleVerifyLoginRequest}
                 />
-                <Button fullWidth variant="contained" color="primary" onClick={handleVerifyLoginRequest}>Verify</Button>
               </>
             )
             : <></>
