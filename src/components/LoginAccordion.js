@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const LoginAccordion = ({ setIsLoggedIn }) => {
+const LoginAccordion = ({ logIn }) => {
   const classes = useStyles();
 
   const [email, setEmail] = useState("");
@@ -56,12 +56,7 @@ const LoginAccordion = ({ setIsLoggedIn }) => {
     try {
       const verifyLoginResponse = await verifyLogin(email, verificationCode);
 
-      // Store auth and refresh tokens in local storage
-      localStorage.setItem("inspiration_v2_auth_token", verifyLoginResponse.data.auth);
-      localStorage.setItem("inspiration_v2_refresh_token", verifyLoginResponse.data.refresh);
-
-      // Set user as logged in so that main page will render
-      setIsLoggedIn(true);
+      logIn(verifyLoginResponse.data.auth, verifyLoginResponse.data.refresh, verifyLoginResponse.data.email, verifyLoginResponse.data.name);
     } catch (err) {
       // If the response property is defined, then there was an error with the server
       if (err.response) {

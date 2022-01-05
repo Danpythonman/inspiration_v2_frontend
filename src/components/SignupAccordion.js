@@ -15,7 +15,7 @@ import { useState } from "react";
 import signup from "../api/signup";
 import verifySignup from "../api/verifySignup";
 
-const SignupAccordion = ({ setIsLoggedIn }) => {
+const SignupAccordion = ({ logIn }) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [waitingForVerification, setWaitingForVerification] = useState(false);
@@ -54,12 +54,7 @@ const SignupAccordion = ({ setIsLoggedIn }) => {
     try {
       const verifySignupResponse = await verifySignup(email, name, verificationCode);
 
-      // Store auth and refresh tokens in local storage
-      localStorage.setItem("inspiration_v2_auth_token", verifySignupResponse.data.auth);
-      localStorage.setItem("inspiration_v2_refresh_token", verifySignupResponse.data.refresh);
-
-      // Set user as logged in so that main page will render
-      setIsLoggedIn(true);
+      logIn(verifySignupResponse.data.auth, verifySignupResponse.data.refresh, email, name);
     } catch (err) {
       // If the response property is defined, then there was an error with the server
       if (err.response) {

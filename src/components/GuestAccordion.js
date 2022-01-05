@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const GuestAccordion = ({ setIsLoggedIn }) => {
+const GuestAccordion = ({ logIn }) => {
   const classes = useStyles();
 
   const [name, setName] = useState("");
@@ -28,15 +28,8 @@ const GuestAccordion = ({ setIsLoggedIn }) => {
   }
 
   const continueAsGuest = () => {
-    // Set auth and refresh tokens in local storage to "guest"
-    localStorage.setItem("inspiration_v2_auth_token", "guest");
-    localStorage.setItem("inspiration_v2_refresh_token", "guest");
-
-    // Set user object in local storage
-    localStorage.setItem("inspiration_v2_user", JSON.stringify({ email: null, name: name }));
-
-    // Set user as logged in so that main page will render
-    setIsLoggedIn(true);
+    // Auth and refresh tokens are both the string "guest", email is null, and the name is the name entered by the user
+    logIn("guest", "guest", null, name);
   }
 
   return (

@@ -9,7 +9,7 @@ import {
 import { useState } from "react";
 import { Settings } from "@mui/icons-material";
 
-const TopAppBar = () => {
+const TopAppBar = ({ logOut }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuAnchorElement, setMenuAnchorElement] = useState(null);
 
@@ -38,7 +38,7 @@ const TopAppBar = () => {
               onClose={closeMenu}
             >
               <MenuItem>Change Name</MenuItem>
-              <MenuItem>Log Out</MenuItem>
+              <MenuItem onClick={logOut}>Log Out</MenuItem>
             </Menu>
           </Grid>
         </Grid>

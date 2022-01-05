@@ -14,7 +14,7 @@ function App() {
 
   const [imageObject, setImageObject] = useState({});
   const [quoteObject, setQuoteObject] = useState({});
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("inspiration_v2_user")));
+  const [user, setUser] = useState(null);
 
   const getImageFromBackend = async () => {
     try {
@@ -51,6 +51,8 @@ function App() {
       const nameAndEmailResponse = await getNameAndEmail();
 
       setUser(nameAndEmailResponse.data);
+
+      // Save name and email to local storage
       localStorage.setItem("inspiration_v2_user", JSON.stringify(nameAndEmailResponse.data));
     } catch (err) {
       // If the response property is defined, then there was an error with the server
@@ -61,6 +63,41 @@ function App() {
       }
     }
   }
+
+  const logIn = (authToken, refreshToken, userEmail, userName) => {
+    // Set auth and refresh tokens in local storage to "guest"
+    localStorage.setItem("inspiration_v2_auth_token", authToken);
+    localStorage.setItem("inspiration_v2_refresh_token", refreshToken);
+
+    // Set user object in local storage
+    localStorage.setItem("inspiration_v2_user", JSON.stringify({ email: userEmail, name: userName }));
+
+    // Set user object in state
+    setUser({ email: userEmail, name: userName });
+
+    // Set to true so main page will be rendered
+    setIsLoggedIn(true);
+  }
+
+  const logOut = () => {
+    // Remove auth token, refresh token, and user name and email from local storage
+    localStorage.removeItem("inspiration_v2_auth_token");
+    localStorage.removeItem("inspiration_v2_refresh_token");
+    localStorage.removeItem("inspiration_v2_user");
+
+    // Remove user from state
+    setUser(null);
+
+    // Set to false so welcome page will be rendered
+    setIsLoggedIn(false);
+  }
+
+  useEffect(() => {
+      // When user logs in, get their name and email from backend
+    if (localStorage.getItem("inspiration_v2_auth_token") && localStorage.getItem("inspiration_v2_auth_token") !== "guest") {
+      getNameAndEmailFromBackend();
+    }
+  }, [isLoggedIn]);
 
   useEffect(() => {
     getImageFromBackend();
@@ -74,8 +111,8 @@ function App() {
     <div className="App">
       {
         isLoggedIn
-        ? <MainPage imageObject={imageObject} quoteObject={quoteObject} user={user} />
-        : <WelcomePage setIsLoggedIn={setIsLoggedIn} />
+        ? <MainPage imageObject={imageObject} quoteObject={quoteObject} user={user} logOut={logOut} />
+        : <WelcomePage logIn={logIn} />
       }
     </div>
   );
