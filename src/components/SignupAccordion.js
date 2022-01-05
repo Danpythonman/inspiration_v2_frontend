@@ -12,20 +12,12 @@ import {
   Divider
 } from "@mui/material";
 import { useState } from "react";
-import { makeStyles } from "@mui/styles";
 import { ExpandMore, Security, Info } from "@mui/icons-material";
+import VerificationCode from "./VerificationCode";
 import signup from "../api/signup";
 import verifySignup from "../api/verifySignup";
 
-const useStyles = makeStyles(theme => ({
-  textFieldButton: {
-    height: "100%"
-  }
-}));
-
 const SignupAccordion = ({ logIn }) => {
-  const classes = useStyles();
-
   const [emailTooltipOpen, setEmailTooltipOpen] = useState(false);
   const [nameTooltipOpen, setNameTooltipOpen] = useState(false);
   const [email, setEmail] = useState("");
@@ -55,10 +47,6 @@ const SignupAccordion = ({ logIn }) => {
 
   const handleNameInput = (event) => {
     setName(event.target.value);
-  }
-
-  const handleVerificationCodeInput = (event) => {
-    setVerificationCode(event.target.value);
   }
 
   const handleSignupRequest = async () => {
@@ -172,40 +160,17 @@ const SignupAccordion = ({ logIn }) => {
             ? (
               <>
                 <Divider />
-                <Typography variant="h5">Verification Code</Typography>
-                <Typography>We sent a 6-digit verification code to {email}</Typography>
-                <Grid container>
-                  <Grid item xs={0} sm={3}/>
-                  <Grid item xs={6} sm={4} sx={{ pr: 1 }}>
-                    <TextField
-                      fullWidth
-                      variant="standard"
-                      label="Verification Code"
-                      value={verificationCode}
-                      onChange={handleVerificationCodeInput}
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={2} sx={{ pl: 1 }}>
-                    <Button
-                      className={classes.textFieldButton}
-                      fullWidth
-                      color="secondary"
-                      variant="contained"
-                      onClick={handleVerifySignupRequest}
-                    >
-                      Verify
-                    </Button>
-                  </Grid>
-                  <Grid item xs={0} sm={3}/>
-                </Grid>
+                <VerificationCode
+                  email={email}
+                  handleVerifyRequest={handleVerifySignupRequest}
+                  verificationCode={verificationCode}
+                  setVerificationCode={setVerificationCode}
+                />
               </>
             )
             : <></>
           }
         </Stack>
-        {/* </Grid> */}
-        {/* <Grid item sm={1}/> */}
-        {/* </Grid> */}
       </AccordionDetails>
     </Accordion>
   );
