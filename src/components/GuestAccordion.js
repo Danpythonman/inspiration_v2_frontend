@@ -33,7 +33,7 @@ const GuestAccordion = ({ logIn }) => {
   }
 
   return (
-    <Accordion>
+    <Accordion square>
       <AccordionSummary expandIcon={<ExpandMore />}>
         <Typography>Continue as Guest</Typography>
       </AccordionSummary>
@@ -42,9 +42,9 @@ const GuestAccordion = ({ logIn }) => {
           <Typography>
             Continuing without an account will mean that your to-do list will not be saved online, only on your local device.
           </Typography>
-          <Grid container spacing={0}>
-            <Grid item xs={0} sm={3}/>
-            <Grid item xs={6} sm={4} sx={{ pr: 1 }}>
+          <Grid container>
+            <Grid item xs={0} sm={2} md={3} />
+            <Grid item xs={8} sm={6} md={4} sx={{ pr: 1 }}>
               <TextField
                 fullWidth
                 variant="standard"
@@ -53,7 +53,7 @@ const GuestAccordion = ({ logIn }) => {
                 onChange={handleNameInput}
               />
             </Grid>
-            <Grid item xs={6} sm={2} sx={{ pl: 1 }}>
+            <Grid item xs={4} sm={2} md={2} sx={{ pl: 1 }}>
               <Button
                 className={classes.textFieldButton}
                 fullWidth
@@ -64,9 +64,8 @@ const GuestAccordion = ({ logIn }) => {
                 Continue
               </Button>
             </Grid>
-            <Grid item xs={0} sm={3}/>
+            <Grid item xs={0} sm={2} md={3} />
           </Grid>
-          <Button fullWidth variant="contained" color="primary" onClick={continueAsGuest}>Continue</Button>
         </Stack>
       </AccordionDetails>
     </Accordion>
