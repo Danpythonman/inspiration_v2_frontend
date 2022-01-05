@@ -4,6 +4,7 @@ import {
 } from "@mui/material";
 import {useState, useEffect } from "react";
 import TopAppBar from "./TopAppBar";
+import MessageDisplay from "./MessageDisplay";
 import BottomAppBar from "./BottomAppBar";
 
 const MainPage = ({ imageObject, quoteObject, user, logOut }) => {
@@ -26,9 +27,9 @@ const MainPage = ({ imageObject, quoteObject, user, logOut }) => {
   return (
     <>
       <TopAppBar logOut={logOut} />
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
-        <Typography color="primary">Welcome {name}</Typography>
-      </Box>
+
+      <MessageDisplay name={name} quoteObject={quoteObject} />
+
       <BottomAppBar />
     </>
   );
