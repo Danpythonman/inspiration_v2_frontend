@@ -8,8 +8,9 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { Settings } from "@mui/icons-material";
+import logOutOfAllDevices from "../api/logOutOfAllDevices";
 
-const TopAppBar = ({ logOut }) => {
+const TopAppBar = ({ user, logOut }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuAnchorElement, setMenuAnchorElement] = useState(null);
 
@@ -21,6 +22,23 @@ const TopAppBar = ({ logOut }) => {
   const closeMenu = () => {
     setMenuAnchorElement(null);
     setMenuOpen(false);
+  }
+
+  const handleLogOutOfAllDevices = async () => {
+    try {
+      const logOutOfAllDevicesResponse = await logOutOfAllDevices();
+
+      logOut();
+
+      alert(logOutOfAllDevicesResponse.data);
+    } catch (err) {
+      // If the response property is defined, then there was an error with the server
+      if (err.response) {
+        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
+      } else {
+        alert(`ERROR: ${err}`);
+      }
+    }
   }
 
   return (
@@ -39,6 +57,11 @@ const TopAppBar = ({ logOut }) => {
             >
               <MenuItem>Change Name</MenuItem>
               <MenuItem onClick={logOut}>Log Out</MenuItem>
+              {
+                user && user.email !== null
+                ? <MenuItem onClick={handleLogOutOfAllDevices}>Log Out Everywhere</MenuItem>
+                : <></>
+              }
             </Menu>
           </Grid>
         </Grid>

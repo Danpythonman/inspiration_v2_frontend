@@ -4,7 +4,7 @@ import MessageDisplay from "./MessageDisplay";
 import BottomAppBar from "./BottomAppBar";
 
 const MainPage = ({ imageObject, quoteObject, user, logOut }) => {
-  const [name, setName] = useState("");
+  const [name, setName] = useState(JSON.parse(localStorage.getItem("inspiration_v2_user")).name);
 
   useEffect(() => {
     if (imageObject) {
@@ -13,16 +13,14 @@ const MainPage = ({ imageObject, quoteObject, user, logOut }) => {
   }, [imageObject]);
 
   useEffect(() => {
-    if (user === JSON.parse(localStorage.getItem("inspiration_v2_user")).name) {
+    if (user && user.name) {
       setName(user.name);
-    } else {
-      setName(JSON.parse(localStorage.getItem("inspiration_v2_user")).name);
     }
   }, [user]);
 
   return (
     <>
-      <TopAppBar logOut={logOut} />
+      <TopAppBar user={user} logOut={logOut} />
 
       <MessageDisplay name={name} quoteObject={quoteObject} />
 

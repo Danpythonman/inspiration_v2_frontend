@@ -80,6 +80,9 @@ function App() {
   }
 
   const logOut = () => {
+    // Set to false so welcome page will be rendered
+    setIsLoggedIn(false);
+
     // Remove auth token, refresh token, and user name and email from local storage
     localStorage.removeItem("inspiration_v2_auth_token");
     localStorage.removeItem("inspiration_v2_refresh_token");
@@ -87,14 +90,11 @@ function App() {
 
     // Remove user from state
     setUser(null);
-
-    // Set to false so welcome page will be rendered
-    setIsLoggedIn(false);
   }
 
   useEffect(() => {
       // When user logs in, get their name and email from backend
-    if (localStorage.getItem("inspiration_v2_auth_token") && localStorage.getItem("inspiration_v2_auth_token") !== "guest") {
+    if (isLoggedIn && localStorage.getItem("inspiration_v2_auth_token") && localStorage.getItem("inspiration_v2_auth_token") !== "guest") {
       getNameAndEmailFromBackend();
     }
   }, [isLoggedIn]);
@@ -102,8 +102,13 @@ function App() {
   useEffect(() => {
     getImageFromBackend();
     getQuoteFromBackend();
+
     if (localStorage.getItem("inspiration_v2_auth_token") && localStorage.getItem("inspiration_v2_auth_token") !== "guest") {
       getNameAndEmailFromBackend();
+    }
+
+    if (localStorage.getItem("inspiration_v2_auth_token") && localStorage.getItem("inspiration_v2_auth_token") === "guest") {
+      setUser(JSON.parse(localStorage.getItem("inspiration_v2_user")));
     }
   }, []);
 
