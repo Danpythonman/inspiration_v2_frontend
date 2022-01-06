@@ -8,11 +8,13 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { Settings } from "@mui/icons-material";
+import ChangeNameDialog from "./ChangeNameDialog";
 import logOutOfAllDevices from "../api/logOutOfAllDevices";
 
-const TopAppBar = ({ user, logOut }) => {
+const TopAppBar = ({ user, handleNameChange, logOut }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuAnchorElement, setMenuAnchorElement] = useState(null);
+  const [nameChangeDialogOpen, setNameChangeDialogOpen] = useState(false);
 
   const openMenu = (event) => {
     setMenuAnchorElement(event.currentTarget);
@@ -22,6 +24,10 @@ const TopAppBar = ({ user, logOut }) => {
   const closeMenu = () => {
     setMenuAnchorElement(null);
     setMenuOpen(false);
+  }
+
+  const handleNameChangeDialogOpen = () => {
+    setNameChangeDialogOpen(true);
   }
 
   const handleLogOutOfAllDevices = async () => {
@@ -55,7 +61,7 @@ const TopAppBar = ({ user, logOut }) => {
               open={menuOpen}
               onClose={closeMenu}
             >
-              <MenuItem>Change Name</MenuItem>
+              <MenuItem onClick={handleNameChangeDialogOpen}>Change Name</MenuItem>
               <MenuItem onClick={logOut}>Log Out</MenuItem>
               {
                 user && user.email !== null
@@ -66,6 +72,12 @@ const TopAppBar = ({ user, logOut }) => {
           </Grid>
         </Grid>
       </Toolbar>
+      <ChangeNameDialog
+        open={nameChangeDialogOpen}
+        setOpen={setNameChangeDialogOpen}
+        user={user}
+        handleNameChange={handleNameChange}
+      />
     </AppBar>
   );
 }

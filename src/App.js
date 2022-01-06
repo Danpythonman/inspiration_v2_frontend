@@ -4,6 +4,7 @@ import WelcomePage from './components/WelcomePage';
 import getImage from './api/getImage';
 import getQuote from './api/getQuote';
 import getNameAndEmail from './api/getNameAndEmail';
+import changeName from './api/changeName';
 import './App.css';
 
 function App() {
@@ -92,6 +93,32 @@ function App() {
     setUser(null);
   }
 
+  const handleNameChange = async (newName) => {
+    try {
+      const oldUserObject = JSON.parse(localStorage.getItem("inspiration_v2_user"));
+      const newUserObject = { email: oldUserObject.email, name: newName };
+
+      // If user is logged in, send request to change name in backend
+      if (oldUserObject.email) {
+        await changeName(newName);
+      }
+
+      setUser(newUserObject);
+
+      // Save name and email to local storage
+      localStorage.setItem("inspiration_v2_user", JSON.stringify(newUserObject));
+
+      alert("Name changed successfully");
+    } catch (err) {
+      // If the response property is defined, then there was an error with the server
+      if (err.response) {
+        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
+      } else {
+        alert(`ERROR: ${err}`);
+      }
+    }
+  }
+
   useEffect(() => {
       // When user logs in, get their name and email from backend
     if (isLoggedIn && localStorage.getItem("inspiration_v2_auth_token") && localStorage.getItem("inspiration_v2_auth_token") !== "guest") {
@@ -116,7 +143,13 @@ function App() {
     <div className="App">
       {
         isLoggedIn
-        ? <MainPage imageObject={imageObject} quoteObject={quoteObject} user={user} logOut={logOut} />
+        ? <MainPage
+          imageObject={imageObject}
+          quoteObject={quoteObject}
+          user={user}
+          handleNameChange={handleNameChange}
+          logOut={logOut}
+        />
         : <WelcomePage logIn={logIn} />
       }
     </div>
