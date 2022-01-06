@@ -9,12 +9,14 @@ import {
 import { useState } from "react";
 import { Settings } from "@mui/icons-material";
 import ChangeNameDialog from "./ChangeNameDialog";
+import DeleteAccountDialog from "./DeleteAccountDialog";
 import logOutOfAllDevices from "../api/logOutOfAllDevices";
 
-const TopAppBar = ({ user, handleNameChange, logOut }) => {
+const TopAppBar = ({ user, handleNameChange, logOut, handleDeleteAccount, handleVerifyDeleteAccount }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuAnchorElement, setMenuAnchorElement] = useState(null);
   const [nameChangeDialogOpen, setNameChangeDialogOpen] = useState(false);
+  const [deleteAccountDialogOpen, setDeleteAccountDialogOpen] = useState(false);
 
   const openMenu = (event) => {
     setMenuAnchorElement(event.currentTarget);
@@ -28,6 +30,10 @@ const TopAppBar = ({ user, handleNameChange, logOut }) => {
 
   const handleNameChangeDialogOpen = () => {
     setNameChangeDialogOpen(true);
+  }
+
+  const handleDeleteAccountDialogOpen = () => {
+    setDeleteAccountDialogOpen(true);
   }
 
   const handleLogOutOfAllDevices = async () => {
@@ -63,10 +69,11 @@ const TopAppBar = ({ user, handleNameChange, logOut }) => {
             >
               <MenuItem onClick={handleNameChangeDialogOpen}>Change Name</MenuItem>
               <MenuItem onClick={logOut}>Log Out</MenuItem>
-              {
-                user && user.email !== null
-                ? <MenuItem onClick={handleLogOutOfAllDevices}>Log Out Everywhere</MenuItem>
-                : <></>
+              {user && user.email !== null &&
+                <>
+                  <MenuItem onClick={handleLogOutOfAllDevices}>Log Out Everywhere</MenuItem>
+                  <MenuItem onClick={handleDeleteAccountDialogOpen}>Delete Account</MenuItem>
+                </>
               }
             </Menu>
           </Grid>
@@ -77,6 +84,13 @@ const TopAppBar = ({ user, handleNameChange, logOut }) => {
         setOpen={setNameChangeDialogOpen}
         user={user}
         handleNameChange={handleNameChange}
+      />
+      <DeleteAccountDialog
+        open={deleteAccountDialogOpen}
+        setOpen={setDeleteAccountDialogOpen}
+        user={user}
+        handleDeleteAccount={handleDeleteAccount}
+        handleVerifyDeleteAccount={handleVerifyDeleteAccount}
       />
     </AppBar>
   );

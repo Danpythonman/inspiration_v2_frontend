@@ -5,6 +5,8 @@ import getImage from './api/getImage';
 import getQuote from './api/getQuote';
 import getNameAndEmail from './api/getNameAndEmail';
 import changeName from './api/changeName';
+import deleteAccount from './api/deleteAccount';
+import verifyDeleteAccount from './api/verifyDeleteAccount';
 import './App.css';
 
 function App() {
@@ -119,6 +121,36 @@ function App() {
     }
   }
 
+  const handleDeleteAccount = async () => {
+    try {
+      await deleteAccount();
+
+      return true;
+    } catch (err) {
+      // If the response property is defined, then there was an error with the server
+      if (err.response) {
+        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
+      } else {
+        alert(`ERROR: ${err}`);
+      }
+    }
+  }
+
+  const handleVerifyDeleteAccount = async (verificationCode) => {
+    try {
+      await verifyDeleteAccount(verificationCode);
+
+      logOut();
+    } catch (err) {
+      // If the response property is defined, then there was an error with the server
+      if (err.response) {
+        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
+      } else {
+        alert(`ERROR: ${err}`);
+      }
+    }
+  }
+
   useEffect(() => {
       // When user logs in, get their name and email from backend
     if (isLoggedIn && localStorage.getItem("inspiration_v2_auth_token") && localStorage.getItem("inspiration_v2_auth_token") !== "guest") {
@@ -149,6 +181,8 @@ function App() {
           user={user}
           handleNameChange={handleNameChange}
           logOut={logOut}
+          handleDeleteAccount={handleDeleteAccount}
+          handleVerifyDeleteAccount={handleVerifyDeleteAccount}
         />
         : <WelcomePage logIn={logIn} />
       }
