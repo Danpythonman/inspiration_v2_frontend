@@ -19,7 +19,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   undefined, // Do nothing if no error in response
   async (error) => {
-    if (error.response.status == 401) {
+    if (error.response.status === 401) {
       // Auth was token invalid, so use refresh token to get new auth token.
 
       let newAuthTokenResponse;
