@@ -43,7 +43,7 @@ api.interceptors.response.use(
       localStorage.setItem("inspiration_v2_auth_token", newAuthTokenResponse.data);
 
       // Use new auth token
-      error.config.headers.authorization = `Bearer ${localStorage.getItem("auth")}`;
+      error.config.headers.authorization = `Bearer ${localStorage.getItem("inspiration_v2_auth_token")}`;
 
       // Re-send request
       return axios.request(error.config);
