@@ -1,10 +1,11 @@
 import {
   Dialog,
+  DialogContent,
+  DialogActions,
   AppBar,
   Toolbar,
   IconButton,
   Slide,
-  List,
   Grid,
   Stack,
   TextField,
@@ -56,6 +57,7 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
   return (
     <Dialog
       fullScreen
+      scroll={"paper"}
       open={open}
       onClose={closeTodoList}
       TransitionComponent={TodoListTransition}
@@ -67,14 +69,15 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <List>
+      <DialogContent>
+      <Stack spacing={3}>
         {
           tasks.map((task, index) => (
             <Stack key={index} direction="row">
               <IconButton sx={{ pl: 2, pr: 2 }}>
                 <RadioButtonUnchecked />
               </IconButton>
-              <TextField fullWidth variant="outlined" value={task.content} style={{ flex: 1 }} />
+              <TextField fullWidth variant="standard" value={task.content} />
               <IconButton sx={{ pl: 2, pr: 1 }}>
                 <Edit />
               </IconButton>
@@ -84,32 +87,31 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
             </Stack>
           ))
         }
-      </List>
-      <AppBar position="fixed" color="transparent" elevation={0} sx={{ top: "auto", bottom: 5 }}>
-        <Toolbar>
-          <Grid container>
-            <Grid item xs={11} sx={{ pr: 1 }}>
-              <TextField
-                fullWidth
-                variant="standard"
-                label="New Task"
-                value={newTask}
-                onChange={handleNewTaskInput}
-              />
-            </Grid>
-            <Grid item xs={1} sx={{ pl: 1 }}>
-              <Button
-                className={classes.textFieldButton}
-                fullWidth
-                variant="contained"
-                onClick={addNewTask}
-              >
-                Add
-              </Button>
-            </Grid>
+      </Stack>
+      </DialogContent>
+      <DialogActions>
+        <Grid container sx={{pl: 3, pr: 3}}>
+          <Grid item xs={11} sx={{ pr: 1 }}>
+            <TextField
+              fullWidth
+              variant="standard"
+              label="New Task"
+              value={newTask}
+              onChange={handleNewTaskInput}
+            />
           </Grid>
-        </Toolbar>
-      </AppBar>
+          <Grid item xs={1} sx={{ pl: 1 }}>
+            <Button
+              className={classes.textFieldButton}
+              fullWidth
+              variant="contained"
+              onClick={addNewTask}
+            >
+              Add
+            </Button>
+          </Grid>
+        </Grid>
+      </DialogActions>
     </Dialog>
   );
 }
