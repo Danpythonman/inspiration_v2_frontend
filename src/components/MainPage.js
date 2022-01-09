@@ -3,7 +3,7 @@ import TopAppBar from "./TopAppBar";
 import MessageDisplay from "./MessageDisplay";
 import BottomAppBar from "./BottomAppBar";
 
-const MainPage = ({ imageObject, quoteObject, user, handleNameChange, logOut, handleDeleteAccount, handleVerifyDeleteAccount }) => {
+const MainPage = ({ imageObject, quoteObject, user, tasks, handleNameChange, logOut, handleDeleteAccount, handleVerifyDeleteAccount }) => {
   const [name, setName] = useState(JSON.parse(localStorage.getItem("inspiration_v2_user")).name);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const MainPage = ({ imageObject, quoteObject, user, handleNameChange, logOut, ha
 
       <MessageDisplay name={name} quoteObject={quoteObject} />
 
-      <BottomAppBar />
+      <BottomAppBar tasks={tasks} />
     </>
   );
 }

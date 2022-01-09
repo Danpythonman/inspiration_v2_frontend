@@ -7,6 +7,7 @@ import getNameAndEmail from './api/getNameAndEmail';
 import changeName from './api/changeName';
 import deleteAccount from './api/deleteAccount';
 import verifyDeleteAccount from './api/verifyDeleteAccount';
+import getTodoList from './api/getTodoList';
 import './App.css';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
   const [imageObject, setImageObject] = useState({});
   const [quoteObject, setQuoteObject] = useState({});
   const [user, setUser] = useState(null);
+  const [tasks, setTasks] = useState([]);
 
   const getImageFromBackend = async () => {
     try {
@@ -67,6 +69,24 @@ function App() {
     }
   }
 
+  const getTasksFromBackend = async () => {
+    try {
+      const todoListResponse = await getTodoList();
+
+      setTasks(todoListResponse.data);
+
+      // Save name and email to local storage
+      localStorage.setItem("inspiration_v2_tasks", JSON.stringify(todoListResponse.data));
+    } catch (err) {
+      // If the response property is defined, then there was an error with the server
+      if (err.response) {
+        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
+      } else {
+        alert(`ERROR: ${err}`);
+      }
+    }
+  }
+
   const logIn = (authToken, refreshToken, userEmail, userName) => {
     // Set auth and refresh tokens in local storage to "guest"
     localStorage.setItem("inspiration_v2_auth_token", authToken);
@@ -86,10 +106,11 @@ function App() {
     // Set to false so welcome page will be rendered
     setIsLoggedIn(false);
 
-    // Remove auth token, refresh token, and user name and email from local storage
+    // Remove auth token, refresh token, user name and email, and to-do list from local storage
     localStorage.removeItem("inspiration_v2_auth_token");
     localStorage.removeItem("inspiration_v2_refresh_token");
     localStorage.removeItem("inspiration_v2_user");
+    localStorage.removeItem("inspiration_v2_tasks");
 
     // Remove user from state
     setUser(null);
@@ -164,10 +185,12 @@ function App() {
 
     if (localStorage.getItem("inspiration_v2_auth_token") && localStorage.getItem("inspiration_v2_auth_token") !== "guest") {
       getNameAndEmailFromBackend();
+      getTasksFromBackend();
     }
 
     if (localStorage.getItem("inspiration_v2_auth_token") && localStorage.getItem("inspiration_v2_auth_token") === "guest") {
       setUser(JSON.parse(localStorage.getItem("inspiration_v2_user")));
+      setTasks(JSON.parse(localStorage.getItem("inspiration_v2_tasks")));
     }
   }, []);
 
@@ -179,6 +202,7 @@ function App() {
           imageObject={imageObject}
           quoteObject={quoteObject}
           user={user}
+          tasks={tasks}
           handleNameChange={handleNameChange}
           logOut={logOut}
           handleDeleteAccount={handleDeleteAccount}
