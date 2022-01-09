@@ -75,7 +75,7 @@ function App() {
 
       setTasks(todoListResponse.data);
 
-      // Save name and email to local storage
+      // Save to-do list to local storage
       localStorage.setItem("inspiration_v2_tasks", JSON.stringify(todoListResponse.data));
     } catch (err) {
       // If the response property is defined, then there was an error with the server
@@ -85,6 +85,14 @@ function App() {
         alert(`ERROR: ${err}`);
       }
     }
+  }
+
+  const updateTasks = (newTasks) => {
+    // Update to-do list in state
+    setTasks(newTasks);
+ 
+    // Update to-do list in local storage
+    localStorage.setItem("inspiration_v2_tasks", JSON.stringify(newTasks));
   }
 
   const logIn = (authToken, refreshToken, userEmail, userName) => {
@@ -203,6 +211,7 @@ function App() {
           quoteObject={quoteObject}
           user={user}
           tasks={tasks}
+          updateTasks={updateTasks}
           handleNameChange={handleNameChange}
           logOut={logOut}
           handleDeleteAccount={handleDeleteAccount}

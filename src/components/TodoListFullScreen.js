@@ -10,9 +10,10 @@ import {
   TextField,
   Button
 } from "@mui/material";
-import { forwardRef, useEffect } from "react";
+import { useState, forwardRef } from "react";
 import { Close, RadioButtonUnchecked, Edit, Delete } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
+import addTask from "../api/addTask";
 
 const useStyles = makeStyles(theme => ({
   textFieldButton: {
@@ -24,16 +25,33 @@ const TodoListTransition = forwardRef((props, ref) => {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const TodoListFullScreen = ({ open, setOpen, tasks }) => {
+const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
   const classes = useStyles();
+
+  const [newTask, setNewTask] = useState();
 
   const closeTodoList = () => {
     setOpen(false);
   }
 
-  useEffect(() => {
-    console.log(tasks);
-  }, [tasks]);
+  const handleNewTaskInput = (event) => {
+    setNewTask(event.target.value);
+  }
+
+  const addNewTask = async () => {
+    try {
+      const newTasks = await addTask(newTask);
+
+      updateTasks(newTasks.data);
+    } catch (err) {
+      // If the response property is defined, then there was an error with the server
+      if (err.response) {
+        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
+      } else {
+        alert(`ERROR: ${err}`);
+      }
+    }
+  }
 
   return (
     <Dialog
@@ -71,10 +89,23 @@ const TodoListFullScreen = ({ open, setOpen, tasks }) => {
         <Toolbar>
           <Grid container>
             <Grid item xs={11} sx={{ pr: 1 }}>
-              <TextField fullWidth variant="standard" label="New Task" />
+              <TextField
+                fullWidth
+                variant="standard"
+                label="New Task"
+                value={newTask}
+                onChange={handleNewTaskInput}
+              />
             </Grid>
             <Grid item xs={1} sx={{ pl: 1 }}>
-              <Button className={classes.textFieldButton} fullWidth variant="contained">Add</Button>
+              <Button
+                className={classes.textFieldButton}
+                fullWidth
+                variant="contained"
+                onClick={addNewTask}
+              >
+                Add
+              </Button>
             </Grid>
           </Grid>
         </Toolbar>

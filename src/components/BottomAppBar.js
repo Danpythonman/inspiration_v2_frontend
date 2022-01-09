@@ -8,7 +8,7 @@ import {
 import { useState } from "react";
 import TodoListFullScreen from "./TodoListFullScreen";
 
-const BottomAppBar = ({ tasks }) => {
+const BottomAppBar = ({ tasks, updateTasks }) => {
   const [todoListOpen, setTodoListOpen] = useState(false);
 
   const openTodoList = () => {
@@ -39,7 +39,12 @@ const BottomAppBar = ({ tasks }) => {
           <Grid item xs={4} />
         </Grid>
       </Toolbar>
-      <TodoListFullScreen open={todoListOpen} setOpen={setTodoListOpen} tasks={tasks} />
+      <TodoListFullScreen
+        open={todoListOpen}
+        setOpen={setTodoListOpen}
+        tasks={tasks}
+        updateTasks={updateTasks}
+      />
     </AppBar>
   );
 }
