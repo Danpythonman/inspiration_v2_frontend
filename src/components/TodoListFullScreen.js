@@ -12,9 +12,11 @@ import {
   Button
 } from "@mui/material";
 import { useState, forwardRef } from "react";
-import { Close, RadioButtonUnchecked, Edit, Delete } from "@mui/icons-material";
+import { Close } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
+import TodoListTask from "./TodoListTask";
 import addTask from "../api/addTask";
+import deleteTask from "../api/deleteTask";
 
 const useStyles = makeStyles(theme => ({
   textFieldButton: {
@@ -29,7 +31,7 @@ const TodoListTransition = forwardRef((props, ref) => {
 const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
   const classes = useStyles();
 
-  const [newTask, setNewTask] = useState();
+  const [newTask, setNewTask] = useState("");
 
   const closeTodoList = () => {
     setOpen(false);
@@ -39,9 +41,24 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
     setNewTask(event.target.value);
   }
 
-  const addNewTask = async () => {
+  const addTaskWrapper = async () => {
     try {
       const newTasks = await addTask(newTask);
+
+      updateTasks(newTasks.data);
+    } catch (err) {
+      // If the response property is defined, then there was an error with the server
+      if (err.response) {
+        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
+      } else {
+        alert(`ERROR: ${err}`);
+      }
+    }
+  }
+
+  const deleteTaskWrapper = async (taskId) => {
+    try {
+      const newTasks = await deleteTask(taskId);
 
       updateTasks(newTasks.data);
     } catch (err) {
@@ -73,18 +90,7 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
       <Stack spacing={3}>
         {
           tasks.map((task, index) => (
-            <Stack key={index} direction="row">
-              <IconButton sx={{ pl: 2, pr: 2 }}>
-                <RadioButtonUnchecked />
-              </IconButton>
-              <TextField fullWidth variant="standard" value={task.content} />
-              <IconButton sx={{ pl: 2, pr: 1 }}>
-                <Edit />
-              </IconButton>
-              <IconButton sx={{ pr: 2 }}>
-                <Delete />
-              </IconButton>
-            </Stack>
+            <TodoListTask key={index} taskObject={task} deleteTask={deleteTaskWrapper} />
           ))
         }
       </Stack>
@@ -105,7 +111,7 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
               className={classes.textFieldButton}
               fullWidth
               variant="contained"
-              onClick={addNewTask}
+              onClick={addTaskWrapper}
             >
               Add
             </Button>
