@@ -70,10 +70,10 @@ const TopAppBar = ({ user, handleNameChange, logOut, handleDeleteAccount, handle
               <MenuItem onClick={handleNameChangeDialogOpen}>Change Name</MenuItem>
               <MenuItem onClick={logOut}>Log Out</MenuItem>
               {user && user.email !== null &&
-                <>
                   <MenuItem onClick={handleLogOutOfAllDevices}>Log Out Everywhere</MenuItem>
+              }
+              {user && user.email !== null &&
                   <MenuItem onClick={handleDeleteAccountDialogOpen}>Delete Account</MenuItem>
-                </>
               }
             </Menu>
           </Grid>
