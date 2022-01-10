@@ -3,19 +3,24 @@ import {
   Toolbar,
   Grid,
   Stack,
-  ButtonGroup,
   Button,
   Link,
   Typography
 } from "@mui/material";
 import { useState } from "react";
 import TodoListFullScreen from "./TodoListFullScreen";
+import SiteInfoDialog from "./SiteInfoDialog";
 
-const BottomAppBar = ({ tasks, updateTasks }) => {
+const BottomAppBar = ({ tasks, updateTasks, imageObject, quoteObject }) => {
   const [todoListOpen, setTodoListOpen] = useState(false);
+  const [siteInfoDialogOpen, setSiteInfoDialogOpen] = useState(false);
 
   const openTodoList = () => {
     setTodoListOpen(true);
+  }
+
+  const openSiteInfoDialog = () => {
+    setSiteInfoDialogOpen(true);
   }
 
   return (
@@ -23,20 +28,24 @@ const BottomAppBar = ({ tasks, updateTasks }) => {
       <Toolbar>
         <Grid container>
           <Grid item xs={2}>
-            <ButtonGroup variant="text" style={{ borderRadius: 1, backgroundColor: "#696969", opacity: 0.7 }}>
-              <Button color="info">Image Credit</Button>
-              <Button color="info">Quote Credit</Button>
-            </ButtonGroup>
+            <Button
+              variant="text"
+              color="info"
+              style={{ borderRadius: 1, backgroundColor: "transparent", position: "fixed", left: "1rem" }}
+              onClick={openSiteInfoDialog}
+            >
+              <strong>Info and Credit</strong>
+            </Button>
           </Grid>
           <Grid item xs={2} />
           <Grid item xs={4}>
             <Button
               variant="text"
               color="info"
-              style={{ borderRadius: 1, backgroundColor: "#696969", opacity: 0.75 }}
+              style={{ borderRadius: 1, backgroundColor: "transparent" }}
               onClick={openTodoList}
             >
-              To-do List
+              <strong>To-do List</strong>
             </Button>
           </Grid>
           <Grid item xs={4}>
@@ -56,6 +65,12 @@ const BottomAppBar = ({ tasks, updateTasks }) => {
         setOpen={setTodoListOpen}
         tasks={tasks}
         updateTasks={updateTasks}
+      />
+      <SiteInfoDialog
+        open={siteInfoDialogOpen}
+        setOpen={setSiteInfoDialogOpen}
+        imageObject={imageObject}
+        quoteObject={quoteObject}
       />
     </AppBar>
   );

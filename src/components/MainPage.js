@@ -28,9 +28,17 @@ const MainPage = ({ imageObject, quoteObject, user, tasks, updateTasks, handleNa
         handleVerifyDeleteAccount={handleVerifyDeleteAccount}
       />
 
-      <MessageDisplay name={name} quoteObject={quoteObject} />
+      <MessageDisplay
+        name={name}
+        quoteObject={quoteObject}
+      />
 
-      <BottomAppBar tasks={tasks} updateTasks={updateTasks} />
+      <BottomAppBar
+        tasks={tasks}
+        updateTasks={updateTasks}
+        imageObject={imageObject}
+        quoteObject={quoteObject}
+      />
     </>
   );
 }
