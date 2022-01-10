@@ -4,7 +4,7 @@ const updateTask = async (taskId, task) => {
     const res = await api.put(
         "/task",
         {
-            taskId, taskId,
+            taskId: taskId,
             task: task
         }
     );
