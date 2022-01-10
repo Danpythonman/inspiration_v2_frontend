@@ -2,6 +2,7 @@ import {
   AppBar,
   Toolbar,
   Grid,
+  Stack,
   ButtonGroup,
   Button,
   Link,
@@ -39,9 +40,14 @@ const BottomAppBar = ({ tasks, updateTasks }) => {
             </Button>
           </Grid>
           <Grid item xs={4}>
-            <Typography style={{ color: "#A9A9A9", position: "fixed", right: 5, bottom: 5 }}>
+            <Stack style={{ position: "fixed", right: 5, bottom: 5 }} alignItems="flex-end">
+            <Typography style={{ color: "#A9A9A9" }}>
+              Image Courtesy of <Link color="inherit" underline="hover" href="https://data.nasa.gov/Space-Science/Astronomy-Picture-of-the-Day-API/ez2w-t8ua">NASA's Astronomy Picture of the Day API</Link>
+            </Typography>
+            <Typography style={{ color: "#A9A9A9" }}>
               Quote Courtesy of <Link color="inherit" underline="hover" href="https://quotes.rest/">They Said So Quotes API</Link>
             </Typography>
+            </Stack>
           </Grid>
         </Grid>
       </Toolbar>
