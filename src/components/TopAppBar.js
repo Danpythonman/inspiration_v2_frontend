@@ -3,7 +3,6 @@ import {
   Toolbar,
   Menu,
   MenuItem,
-  Grid,
   IconButton
 } from "@mui/material";
 import { useState } from "react";
@@ -56,9 +55,7 @@ const TopAppBar = ({ user, handleNameChange, logOut, handleDeleteAccount, handle
   return (
     <AppBar position="static" color="transparent" elevation={0}>
       <Toolbar>
-        <Grid container>
-          <Grid item xs={11} />
-          <Grid item xs={1}>
+        <div style={{ flex: 1 }}></div>
             <IconButton onClick={openMenu}>
               <Settings sx={{ color: "#FFFFFF" }} fontSize="large" />
             </IconButton>
@@ -76,8 +73,6 @@ const TopAppBar = ({ user, handleNameChange, logOut, handleDeleteAccount, handle
                   <MenuItem onClick={handleDeleteAccountDialogOpen}>Delete Account</MenuItem>
               }
             </Menu>
-          </Grid>
-        </Grid>
       </Toolbar>
       <ChangeNameDialog
         open={nameChangeDialogOpen}
