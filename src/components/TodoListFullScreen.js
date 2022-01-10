@@ -4,6 +4,7 @@ import {
   DialogActions,
   AppBar,
   Toolbar,
+  Typography,
   IconButton,
   Slide,
   Grid,
@@ -113,8 +114,9 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
     >
       <AppBar position="static">
         <Toolbar>
+          <Typography sx={{ flex: 1 }} variant="h5">To-do List</Typography>
           <IconButton onClick={closeTodoList}>
-            <Close />
+            <Close fontSize="large" color="info" />
           </IconButton>
         </Toolbar>
       </AppBar>
