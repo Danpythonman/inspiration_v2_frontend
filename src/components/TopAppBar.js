@@ -56,23 +56,23 @@ const TopAppBar = ({ user, handleNameChange, logOut, handleDeleteAccount, handle
     <AppBar position="static" color="transparent" elevation={0}>
       <Toolbar>
         <div style={{ flex: 1 }}></div>
-            <IconButton onClick={openMenu}>
-              <Settings sx={{ color: "#FFFFFF" }} fontSize="large" />
-            </IconButton>
-            <Menu
-              anchorEl={menuAnchorElement}
-              open={menuOpen}
-              onClose={closeMenu}
-            >
-              <MenuItem onClick={handleNameChangeDialogOpen}>Change Name</MenuItem>
-              <MenuItem onClick={logOut}>Log Out</MenuItem>
-              {user && user.email !== null &&
-                  <MenuItem onClick={handleLogOutOfAllDevices}>Log Out Everywhere</MenuItem>
-              }
-              {user && user.email !== null &&
-                  <MenuItem onClick={handleDeleteAccountDialogOpen}>Delete Account</MenuItem>
-              }
-            </Menu>
+        <IconButton onClick={openMenu}>
+          <Settings sx={{ color: "#FFFFFF" }} fontSize="large" />
+        </IconButton>
+        <Menu
+          anchorEl={menuAnchorElement}
+          open={menuOpen}
+          onClose={closeMenu}
+        >
+          <MenuItem onClick={handleNameChangeDialogOpen}>Change Name</MenuItem>
+          <MenuItem onClick={logOut}>Log Out</MenuItem>
+          {user && user.email !== null &&
+              <MenuItem onClick={handleLogOutOfAllDevices}>Log Out Everywhere</MenuItem>
+          }
+          {user && user.email !== null &&
+              <MenuItem onClick={handleDeleteAccountDialogOpen}>Delete Account</MenuItem>
+          }
+        </Menu>
       </Toolbar>
       <ChangeNameDialog
         open={nameChangeDialogOpen}
