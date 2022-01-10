@@ -4,10 +4,11 @@ import {
   IconButton
 } from "@mui/material";
 import { useState, useEffect } from "react";
-import { RadioButtonUnchecked, Edit, Check, Close, Delete } from "@mui/icons-material";
+import { RadioButtonUnchecked, CheckCircle, Edit, Check, Close, Delete } from "@mui/icons-material";
 
-const TodoListTask = ({ taskObject, updateTask, deleteTask }) => {
+const TodoListTask = ({ taskObject, updateTask, updateTaskCompletion, deleteTask }) => {
   const [task, setTask] = useState("");
+  const [completed, setCompleted] = useState(false);
   const [editTask, setEditTask] = useState(false);
 
   const openTaskEdit = () => {
@@ -30,21 +31,32 @@ const TodoListTask = ({ taskObject, updateTask, deleteTask }) => {
     setEditTask(false);
   }
 
+  const updateTaskCompletionWrapper = () => {
+    setCompleted(completed ? false : true);
+    updateTaskCompletion(taskObject._id, completed ? false : true);
+  }
+
   const deleteTaskWrapper = () => {
     deleteTask(taskObject._id);
   }
 
   useEffect(() => {
     setTask(taskObject.content);
+    setCompleted(taskObject.completed);
   }, [taskObject]);
 
   return (
     <Stack direction="row">
-      <IconButton sx={{ pl: 2, pr: 2 }}>
-        <RadioButtonUnchecked />
+      <IconButton sx={{ pl: 2, pr: 2 }} onClick={updateTaskCompletionWrapper}>
+        {
+          completed
+          ? <CheckCircle />
+          : <RadioButtonUnchecked />
+        }
       </IconButton>
       <TextField
         fullWidth
+        style={{ textDecoration: completed ? "line-through": "none" }}
         variant={
           editTask
           ? "filled"

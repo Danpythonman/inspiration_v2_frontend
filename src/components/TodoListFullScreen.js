@@ -17,6 +17,7 @@ import { makeStyles } from "@mui/styles";
 import TodoListTask from "./TodoListTask";
 import addTask from "../api/addTask";
 import updateTask from "../api/updateTask";
+import updateTaskCompletion from "../api/updateTaskCompletion";
 import deleteTask from "../api/deleteTask";
 
 const useStyles = makeStyles(theme => ({
@@ -72,6 +73,21 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
     }
   }
 
+  const updateTaskCompletionWrapper = async (taskId, completed) => {
+    try {
+      const newTasks = await updateTaskCompletion(taskId, completed);
+
+      updateTasks(newTasks.data);
+    } catch (err) {
+      // If the response property is defined, then there was an error with the server
+      if (err.response) {
+        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
+      } else {
+        alert(`ERROR: ${err}`);
+      }
+    }
+  }
+
   const deleteTaskWrapper = async (taskId) => {
     try {
       const newTasks = await deleteTask(taskId);
@@ -110,6 +126,7 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
               key={index}
               taskObject={task}
               updateTask={updateTaskWrapper}
+              updateTaskCompletion={updateTaskCompletionWrapper}
               deleteTask={deleteTaskWrapper}
             />
           ))
