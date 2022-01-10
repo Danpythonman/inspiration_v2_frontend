@@ -3,7 +3,9 @@ import {
   Toolbar,
   Grid,
   ButtonGroup,
-  Button
+  Button,
+  Link,
+  Typography
 } from "@mui/material";
 import { useState } from "react";
 import TodoListFullScreen from "./TodoListFullScreen";
@@ -36,7 +38,11 @@ const BottomAppBar = ({ tasks, updateTasks }) => {
               To-do List
             </Button>
           </Grid>
-          <Grid item xs={4} />
+          <Grid item xs={4}>
+            <Typography style={{ color: "#A9A9A9", position: "fixed", right: 5, bottom: 5 }}>
+              Quote Courtesy of <Link color="inherit" underline="hover" href="https://quotes.rest/">They Said So Quotes API</Link>
+            </Typography>
+          </Grid>
         </Grid>
       </Toolbar>
       <TodoListFullScreen
