@@ -16,6 +16,7 @@ import { Close } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
 import TodoListTask from "./TodoListTask";
 import addTask from "../api/addTask";
+import updateTask from "../api/updateTask";
 import deleteTask from "../api/deleteTask";
 
 const useStyles = makeStyles(theme => ({
@@ -44,6 +45,21 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
   const addTaskWrapper = async () => {
     try {
       const newTasks = await addTask(newTask);
+
+      updateTasks(newTasks.data);
+    } catch (err) {
+      // If the response property is defined, then there was an error with the server
+      if (err.response) {
+        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
+      } else {
+        alert(`ERROR: ${err}`);
+      }
+    }
+  }
+
+  const updateTaskWrapper = async (taskId, updatedTask) => {
+    try {
+      const newTasks = await updateTask(taskId, updatedTask);
 
       updateTasks(newTasks.data);
     } catch (err) {
@@ -90,7 +106,12 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
       <Stack spacing={3}>
         {
           tasks.map((task, index) => (
-            <TodoListTask key={index} taskObject={task} deleteTask={deleteTaskWrapper} />
+            <TodoListTask
+              key={index}
+              taskObject={task}
+              updateTask={updateTaskWrapper}
+              deleteTask={deleteTaskWrapper}
+            />
           ))
         }
       </Stack>
