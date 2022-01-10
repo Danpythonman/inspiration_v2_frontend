@@ -4,7 +4,7 @@ import {
   IconButton
 } from "@mui/material";
 import { useState, useEffect } from "react";
-import { RadioButtonUnchecked, CheckCircle, Edit, Check, Close, Delete } from "@mui/icons-material";
+import { RadioButtonUnchecked, CheckCircle, Edit, Check, DoneOutline, Undo, Close, Delete } from "@mui/icons-material";
 
 const TodoListTask = ({ taskObject, updateTask, updateTaskCompletion, deleteTask }) => {
   const [task, setTask] = useState("");
@@ -70,20 +70,40 @@ const TodoListTask = ({ taskObject, updateTask, updateTaskCompletion, deleteTask
         value={task}
         onChange={handleTaskInput}
       />
-      <IconButton sx={{ pl: 2, pr: 1 }} onClick={editTask ? updateTaskWrapper : openTaskEdit}>
-        {
-          editTask
-          ? <Check />
-          : <Edit />
-        }
-      </IconButton>
-      <IconButton sx={{ pr: 2 }} onClick={editTask ? resetTask : deleteTaskWrapper}>
-        {
-          editTask
-          ? <Close />
-          : <Delete />
-        }
-      </IconButton>
+      {
+        completed
+        ? (
+          <>
+            <IconButton sx={{ pl: 2, pr: 1 }} onClick={deleteTaskWrapper}>
+              <DoneOutline />
+            </IconButton>
+            <IconButton sx={{ pr: 2 }} onClick={updateTaskCompletionWrapper}>
+              <Undo />
+            </IconButton>
+          </>
+        )
+        : editTask
+          ? (
+            <>
+              <IconButton sx={{ pl: 2, pr: 1 }} onClick={updateTaskWrapper}>
+                <Check />
+              </IconButton>
+              <IconButton sx={{ pr: 2 }} onClick={resetTask}>
+                <Close />
+              </IconButton>
+            </>
+          )
+          : (
+            <>
+              <IconButton sx={{ pl: 2, pr: 1 }} onClick={openTaskEdit}>
+                <Edit />
+              </IconButton>
+              <IconButton sx={{ pr: 2 }} onClick={deleteTaskWrapper}>
+                <Delete />
+              </IconButton>
+            </>
+          )
+      }
     </Stack>
   );
 }
