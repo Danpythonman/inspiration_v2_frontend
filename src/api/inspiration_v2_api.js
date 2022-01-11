@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000"
+  baseURL: "https://inspiration-v2-backend.herokuapp.com"
 });
 
 api.interceptors.request.use(
