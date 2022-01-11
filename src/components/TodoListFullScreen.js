@@ -7,33 +7,23 @@ import {
   Typography,
   IconButton,
   Slide,
-  Grid,
   Stack,
   TextField,
-  Button
+  InputAdornment
 } from "@mui/material";
 import { useState, forwardRef } from "react";
-import { Close } from "@mui/icons-material";
-import { makeStyles } from "@mui/styles";
+import { Close, Add } from "@mui/icons-material";
 import TodoListTask from "./TodoListTask";
 import addTask from "../api/addTask";
 import updateTask from "../api/updateTask";
 import updateTaskCompletion from "../api/updateTaskCompletion";
 import deleteTask from "../api/deleteTask";
 
-const useStyles = makeStyles(theme => ({
-  textFieldButton: {
-    height: "100%"
-  }
-}));
-
 const TodoListTransition = forwardRef((props, ref) => {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
-  const classes = useStyles();
-
   const [newTask, setNewTask] = useState("");
 
   const closeTodoList = () => {
@@ -44,11 +34,20 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
     setNewTask(event.target.value);
   }
 
+  const addTaskOnEnter = (event) => {
+    if (event.key === "Enter") {
+      addTaskWrapper();
+    }
+  }
+
   const addTaskWrapper = async () => {
     try {
       const newTasks = await addTask(newTask);
 
       updateTasks(newTasks.data);
+
+      // Remove task from textfield
+      setNewTask("");
     } catch (err) {
       // If the response property is defined, then there was an error with the server
       if (err.response) {
@@ -136,27 +135,23 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
       </Stack>
       </DialogContent>
       <DialogActions>
-        <Grid container sx={{pl: 3, pr: 3}}>
-          <Grid item xs={11} sx={{ pr: 1 }}>
-            <TextField
-              fullWidth
-              variant="standard"
-              label="New Task"
-              value={newTask}
-              onChange={handleNewTaskInput}
-            />
-          </Grid>
-          <Grid item xs={1} sx={{ pl: 1 }}>
-            <Button
-              className={classes.textFieldButton}
-              fullWidth
-              variant="contained"
-              onClick={addTaskWrapper}
-            >
-              Add
-            </Button>
-          </Grid>
-        </Grid>
+        <TextField
+          fullWidth
+          variant="standard"
+          label="New Task"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment>
+                <IconButton onClick={addTaskWrapper}>
+                  <Add />
+                </IconButton>
+              </InputAdornment>
+            )
+          }}
+          value={newTask}
+          onChange={handleNewTaskInput}
+          onKeyPress={addTaskOnEnter}
+        />
       </DialogActions>
     </Dialog>
   );
