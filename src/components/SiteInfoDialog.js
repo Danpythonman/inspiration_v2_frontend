@@ -34,13 +34,6 @@ const SiteInfoDialog = ({ open, setOpen, imageObject, quoteObject }) => {
         <Typography><strong>Description:</strong> {imageObject.description}</Typography>
         <br/>
         <Typography variant="h5">Quote</Typography>
-        <Typography>
-          {"Quote provided by "}
-          <Link underline="hover" href="https://quotes.rest/">
-          They Said So Quotes API
-          </Link>
-          {"."}
-        </Typography>
         <Typography><strong>Author:</strong> {quoteObject.author}</Typography>
         <br/>
         <Typography variant="h5">Developer</Typography>
