@@ -6,7 +6,7 @@ import {
 import { useState, useEffect } from "react";
 import { RadioButtonUnchecked, CheckCircle, Edit, Check, DoneOutline, Undo, Close, Delete } from "@mui/icons-material";
 
-const TodoListTask = ({ taskObject, updateTask, updateTaskCompletion, deleteTask }) => {
+const TodoListTask = ({ index, taskObject, updateTask, updateTaskCompletion, deleteTask }) => {
   const [task, setTask] = useState("");
   const [completed, setCompleted] = useState(false);
   const [editTask, setEditTask] = useState(false);
@@ -27,17 +27,36 @@ const TodoListTask = ({ taskObject, updateTask, updateTaskCompletion, deleteTask
   }
 
   const updateTaskWrapper = () => {
-    updateTask(taskObject._id, task);
+    // If user is a guest, the task id is the task's index in the array of tasks.
+    // If user is not a guest, the task id is the _id property from the database.
+    if (localStorage.getItem("inspiration_v2_auth_token") && localStorage.getItem("inspiration_v2_auth_token") === "guest") {
+      updateTask(index, task);
+    } else {
+      updateTask(taskObject._id, task);
+    }
     setEditTask(false);
   }
 
   const updateTaskCompletionWrapper = () => {
     setCompleted(completed ? false : true);
-    updateTaskCompletion(taskObject._id, completed ? false : true);
+
+    // If user is a guest, the task id is the task's index in the array of tasks.
+    // If user is not a guest, the task id is the _id property from the database.
+    if (localStorage.getItem("inspiration_v2_auth_token") && localStorage.getItem("inspiration_v2_auth_token") === "guest") {
+      updateTaskCompletion(index, completed ? false : true);
+    } else {
+      updateTaskCompletion(taskObject._id, completed ? false : true);
+    }
   }
 
   const deleteTaskWrapper = () => {
-    deleteTask(taskObject._id);
+    // If user is a guest, the task id is the task's index in the array of tasks.
+    // If user is not a guest, the task id is the _id property from the database.
+    if (localStorage.getItem("inspiration_v2_auth_token") && localStorage.getItem("inspiration_v2_auth_token") === "guest") {
+      deleteTask(index);
+    } else {
+      deleteTask(taskObject._id);
+    }
   }
 
   useEffect(() => {

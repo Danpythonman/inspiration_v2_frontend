@@ -42,9 +42,19 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
 
   const addTaskWrapper = async () => {
     try {
-      const newTasks = await addTask(newTask);
+      // If user is a guest, the task id is the task's index in the array of tasks.
+      // If user is not a guest, the task id is the _id property from the database.
+      if (localStorage.getItem("inspiration_v2_auth_token") && localStorage.getItem("inspiration_v2_auth_token") === "guest") {
+        const currentTasks = JSON.parse(localStorage.getItem("inspiration_v2_tasks"));
 
-      updateTasks(newTasks.data);
+        const newTasks = currentTasks.concat({ content: newTask, completed: false });
+
+        updateTasks(newTasks);
+      } else {
+        const newTasks = await addTask(newTask);
+
+        updateTasks(newTasks.data);
+      }
 
       // Remove task from textfield
       setNewTask("");
@@ -60,9 +70,19 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
 
   const updateTaskWrapper = async (taskId, updatedTask) => {
     try {
-      const newTasks = await updateTask(taskId, updatedTask);
+      // If user is a guest, the task id is the task's index in the array of tasks.
+      // If user is not a guest, the task id is the _id property from the database.
+      if (localStorage.getItem("inspiration_v2_auth_token") && localStorage.getItem("inspiration_v2_auth_token") === "guest") {
+        const currentTasks = JSON.parse(localStorage.getItem("inspiration_v2_tasks"));
 
-      updateTasks(newTasks.data);
+        const newTasks = currentTasks.map((task, index) => index === taskId ? { ...task, content: updatedTask } : { ...task });
+
+        updateTasks(newTasks);
+      } else {
+        const newTasks = await updateTask(taskId, updatedTask);
+
+        updateTasks(newTasks.data);
+      }
     } catch (err) {
       // If the response property is defined, then there was an error with the server
       if (err.response) {
@@ -75,9 +95,19 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
 
   const updateTaskCompletionWrapper = async (taskId, completed) => {
     try {
-      const newTasks = await updateTaskCompletion(taskId, completed);
+      // If user is a guest, the task id is the task's index in the array of tasks.
+      // If user is not a guest, the task id is the _id property from the database.
+      if (localStorage.getItem("inspiration_v2_auth_token") && localStorage.getItem("inspiration_v2_auth_token") === "guest") {
+        const currentTasks = JSON.parse(localStorage.getItem("inspiration_v2_tasks"));
 
-      updateTasks(newTasks.data);
+        const newTasks = currentTasks.map((task, index) => index === taskId ? { ...task, completed: completed } : { ...task });
+
+        updateTasks(newTasks);
+      } else {
+        const newTasks = await updateTaskCompletion(taskId, completed);
+
+        updateTasks(newTasks.data);
+      }
     } catch (err) {
       // If the response property is defined, then there was an error with the server
       if (err.response) {
@@ -90,9 +120,19 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
 
   const deleteTaskWrapper = async (taskId) => {
     try {
-      const newTasks = await deleteTask(taskId);
+      // If user is a guest, the task id is the task's index in the array of tasks.
+      // If user is not a guest, the task id is the _id property from the database.
+      if (localStorage.getItem("inspiration_v2_auth_token") && localStorage.getItem("inspiration_v2_auth_token") === "guest") {
+        const currentTasks = JSON.parse(localStorage.getItem("inspiration_v2_tasks"));
 
-      updateTasks(newTasks.data);
+        const newTasks = currentTasks.filter((task, index) => index !== taskId);
+
+        updateTasks(newTasks);
+      } else {
+        const newTasks = await deleteTask(taskId);
+
+        updateTasks(newTasks.data);
+      }
     } catch (err) {
       // If the response property is defined, then there was an error with the server
       if (err.response) {
@@ -125,6 +165,7 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
           tasks.map((task, index) => (
             <TodoListTask
               key={index}
+              index={index}
               taskObject={task}
               updateTask={updateTaskWrapper}
               updateTaskCompletion={updateTaskCompletionWrapper}

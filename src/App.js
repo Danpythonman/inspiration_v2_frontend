@@ -69,14 +69,29 @@ function App() {
     }
   }
 
-  const getTasksFromBackend = async () => {
+  const getTasks = async () => {
     try {
-      const todoListResponse = await getTodoList();
+      // If user is a guest, then get the tasks from local storage.
+      // If user is not a guest, then get the tasks from the database.
+      if (localStorage.getItem("inspiration_v2_auth_token") === "guest") {
+        // Get to-do list from local storage
+        let todoList = JSON.parse(localStorage.getItem("inspiration_v2_tasks"));
 
-      setTasks(todoListResponse.data);
+        if (!todoList) {
+          todoList = [];
+          localStorage.setItem("inspiration_v2_tasks", JSON.stringify(todoList));
+        }
 
-      // Save to-do list to local storage
-      localStorage.setItem("inspiration_v2_tasks", JSON.stringify(todoListResponse.data));
+        // Save to-do list to state
+        setTasks(todoList);
+      } else {
+        // Get to-do list from backend
+        const todoListResponse = await getTodoList();
+
+        // Save to-do list to state and local storage
+        setTasks(todoListResponse.data);
+        localStorage.setItem("inspiration_v2_tasks", JSON.stringify(todoListResponse.data));
+      }
     } catch (err) {
       // If the response property is defined, then there was an error with the server
       if (err.response) {
@@ -90,7 +105,7 @@ function App() {
   const updateTasks = (newTasks) => {
     // Update to-do list in state
     setTasks(newTasks);
- 
+
     // Update to-do list in local storage
     localStorage.setItem("inspiration_v2_tasks", JSON.stringify(newTasks));
   }
@@ -181,9 +196,15 @@ function App() {
   }
 
   useEffect(() => {
-      // When user logs in, get their name and email from backend
-    if (isLoggedIn && localStorage.getItem("inspiration_v2_auth_token") && localStorage.getItem("inspiration_v2_auth_token") !== "guest") {
-      getNameAndEmailFromBackend();
+    // When user logs in, get their name and email from backend
+    if (isLoggedIn) {
+      // If user is not a guest, get their name and email from backend
+      if (localStorage.getItem("inspiration_v2_auth_token") && localStorage.getItem("inspiration_v2_auth_token") !== "guest") {
+        getNameAndEmailFromBackend();
+      }
+
+      // Also get tasks. This function gets tasks from backend if user is logged in, or from local storage if user is a guest.
+      getTasks();
     }
   }, [isLoggedIn]);
 
@@ -193,12 +214,8 @@ function App() {
 
     if (localStorage.getItem("inspiration_v2_auth_token") && localStorage.getItem("inspiration_v2_auth_token") !== "guest") {
       getNameAndEmailFromBackend();
-      getTasksFromBackend();
-    }
-
-    if (localStorage.getItem("inspiration_v2_auth_token") && localStorage.getItem("inspiration_v2_auth_token") === "guest") {
+    } else {
       setUser(JSON.parse(localStorage.getItem("inspiration_v2_user")));
-      setTasks(JSON.parse(localStorage.getItem("inspiration_v2_tasks")));
     }
   }, []);
 
