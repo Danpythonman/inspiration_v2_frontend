@@ -182,7 +182,7 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
           label="New Task"
           InputProps={{
             endAdornment: (
-              <InputAdornment>
+              <InputAdornment position="end">
                 <IconButton onClick={addTaskWrapper}>
                   <Add />
                 </IconButton>
