@@ -1,3 +1,4 @@
+import { Snackbar, Alert, AlertTitle } from '@mui/material';
 import { useState, useEffect } from 'react';
 import MainPage from './components/MainPage';
 import WelcomePage from './components/WelcomePage';
@@ -20,6 +21,21 @@ function App() {
   const [quoteObject, setQuoteObject] = useState({});
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
+  const [errorAlertOpen, setErrorAlertOpen] = useState(false);
+  const [errorAlertTitle, setErrorAlertTitle] = useState("");
+  const [errorAlertMessage, setErrorAlertMessage] = useState("");
+
+  const handleOpenErrorAlert = (errorTitle, errorMessage) => {
+    setErrorAlertOpen(true);
+    setErrorAlertTitle(errorTitle);
+    setErrorAlertMessage(errorMessage);
+  }
+
+  const handleCloseErrorAlert = () => {
+    setErrorAlertOpen(false);
+    setErrorAlertTitle("");
+    setErrorAlertMessage("");
+  }
 
   const logIn = (authToken, refreshToken, userEmail, userName) => {
     // Set auth and refresh tokens in local storage to "guest"
@@ -55,13 +71,13 @@ function App() {
     if (err.response) {
       // If the status is 401, then the refresh token is invalid and the user must log in again
       if (err.response.status === 401) {
-        alert("Token expired, please log in again");
+        handleOpenErrorAlert("Token expired or invalid", "Please log in again");
         logOut();
       } else {
-        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
+        handleOpenErrorAlert(`Server Error - Status ${err.response.status}`, err.response.data);
       }
     } else {
-      alert(`ERROR: ${err}`);
+      handleOpenErrorAlert("Client Error", err);
     }
   }
 
@@ -206,21 +222,29 @@ function App() {
 
   return (
     <div className="App">
-      {
-        isLoggedIn
-        ? <MainPage
-          imageObject={imageObject}
-          quoteObject={quoteObject}
-          user={user}
-          tasks={tasks}
-          updateTasks={updateTasks}
-          handleNameChange={handleNameChange}
-          logOut={logOut}
-          handleDeleteAccount={handleDeleteAccount}
-          handleVerifyDeleteAccount={handleVerifyDeleteAccount}
-        />
-        : <WelcomePage logIn={logIn} />
-      }
+      <>
+        {
+          isLoggedIn
+          ? <MainPage
+            imageObject={imageObject}
+            quoteObject={quoteObject}
+            user={user}
+            tasks={tasks}
+            updateTasks={updateTasks}
+            handleNameChange={handleNameChange}
+            logOut={logOut}
+            handleDeleteAccount={handleDeleteAccount}
+            handleVerifyDeleteAccount={handleVerifyDeleteAccount}
+          />
+          : <WelcomePage logIn={logIn} />
+        }
+        <Snackbar open={errorAlertOpen}>
+          <Alert severity="error" onClose={handleCloseErrorAlert}>
+            <AlertTitle>{errorAlertTitle}</AlertTitle>
+            {errorAlertMessage}
+          </Alert>
+        </Snackbar>
+      </>
     </div>
   );
 }
