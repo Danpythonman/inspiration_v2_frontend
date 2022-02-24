@@ -23,7 +23,7 @@ const TodoListTransition = forwardRef((props, ref) => {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
+const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks, handleAPIRequestError }) => {
   const [newTask, setNewTask] = useState("");
 
   const closeTodoList = () => {
@@ -59,12 +59,7 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
       // Remove task from textfield
       setNewTask("");
     } catch (err) {
-      // If the response property is defined, then there was an error with the server
-      if (err.response) {
-        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
-      } else {
-        alert(`ERROR: ${err}`);
-      }
+      handleAPIRequestError(err);
     }
   }
 
@@ -84,12 +79,7 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
         updateTasks(newTasks.data);
       }
     } catch (err) {
-      // If the response property is defined, then there was an error with the server
-      if (err.response) {
-        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
-      } else {
-        alert(`ERROR: ${err}`);
-      }
+      handleAPIRequestError(err);
     }
   }
 
@@ -109,12 +99,7 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
         updateTasks(newTasks.data);
       }
     } catch (err) {
-      // If the response property is defined, then there was an error with the server
-      if (err.response) {
-        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
-      } else {
-        alert(`ERROR: ${err}`);
-      }
+      handleAPIRequestError(err);
     }
   }
 
@@ -134,12 +119,7 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks }) => {
         updateTasks(newTasks.data);
       }
     } catch (err) {
-      // If the response property is defined, then there was an error with the server
-      if (err.response) {
-        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
-      } else {
-        alert(`ERROR: ${err}`);
-      }
+      handleAPIRequestError(err);
     }
   }
 

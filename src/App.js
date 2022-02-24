@@ -235,6 +235,7 @@ function App() {
             logOut={logOut}
             handleDeleteAccount={handleDeleteAccount}
             handleVerifyDeleteAccount={handleVerifyDeleteAccount}
+            handleAPIRequestError={handleAPIRequestError}
           />
           : <WelcomePage logIn={logIn} />
         }
