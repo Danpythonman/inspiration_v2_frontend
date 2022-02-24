@@ -21,95 +21,6 @@ function App() {
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
 
-  const getImageFromBackend = async () => {
-    try {
-      const imageResponse = await getImage();
-
-      setImageObject(imageResponse.data);
-    } catch (err) {
-      // If the response property is defined, then there was an error with the server
-      if (err.response) {
-        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
-      } else {
-        alert(`ERROR: ${err}`);
-      }
-    }
-  }
-
-  const getQuoteFromBackend = async () => {
-    try {
-      const quoteResponse = await getQuote();
-
-      setQuoteObject(quoteResponse.data);
-    } catch (err) {
-      // If the response property is defined, then there was an error with the server
-      if (err.response) {
-        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
-      } else {
-        alert(`ERROR: ${err}`);
-      }
-    }
-  }
-
-  const getNameAndEmailFromBackend = async () => {
-    try {
-      const nameAndEmailResponse = await getNameAndEmail();
-
-      setUser(nameAndEmailResponse.data);
-
-      // Save name and email to local storage
-      localStorage.setItem("inspiration_v2_user", JSON.stringify(nameAndEmailResponse.data));
-    } catch (err) {
-      // If the response property is defined, then there was an error with the server
-      if (err.response) {
-        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
-      } else {
-        alert(`ERROR: ${err}`);
-      }
-    }
-  }
-
-  const getTasks = async () => {
-    try {
-      // If user is a guest, then get the tasks from local storage.
-      // If user is not a guest, then get the tasks from the database.
-      if (localStorage.getItem("inspiration_v2_auth_token") === "guest") {
-        // Get to-do list from local storage
-        let todoList = JSON.parse(localStorage.getItem("inspiration_v2_tasks"));
-
-        if (!todoList) {
-          todoList = [];
-          localStorage.setItem("inspiration_v2_tasks", JSON.stringify(todoList));
-        }
-
-        // Save to-do list to state
-        setTasks(todoList);
-      } else {
-        // Get to-do list from backend
-        const todoListResponse = await getTodoList();
-
-        // Save to-do list to state and local storage
-        setTasks(todoListResponse.data);
-        localStorage.setItem("inspiration_v2_tasks", JSON.stringify(todoListResponse.data));
-      }
-    } catch (err) {
-      // If the response property is defined, then there was an error with the server
-      if (err.response) {
-        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
-      } else {
-        alert(`ERROR: ${err}`);
-      }
-    }
-  }
-
-  const updateTasks = (newTasks) => {
-    // Update to-do list in state
-    setTasks(newTasks);
-
-    // Update to-do list in local storage
-    localStorage.setItem("inspiration_v2_tasks", JSON.stringify(newTasks));
-  }
-
   const logIn = (authToken, refreshToken, userEmail, userName) => {
     // Set auth and refresh tokens in local storage to "guest"
     localStorage.setItem("inspiration_v2_auth_token", authToken);
@@ -139,6 +50,82 @@ function App() {
     setUser(null);
   }
 
+  const handleAPIRequestError = (err) => {
+    // If the response property is defined, then there was an error with the server
+    if (err.response) {
+      // If the status is 401, then the refresh token is invalid and the user must log in again
+      if (err.response.status === 401) {
+        alert("Token expired, please log in again");
+        logOut();
+      } else {
+        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
+      }
+    } else {
+      alert(`ERROR: ${err}`);
+    }
+  }
+
+  const getImageFromBackend = async () => {
+    try {
+      const imageResponse = await getImage();
+
+      setImageObject(imageResponse.data);
+    } catch (err) {
+      handleAPIRequestError(err);
+    }
+  }
+
+  const getQuoteFromBackend = async () => {
+    try {
+      const quoteResponse = await getQuote();
+
+      setQuoteObject(quoteResponse.data);
+    } catch (err) {
+      handleAPIRequestError(err);
+    }
+  }
+
+  const getNameAndEmailFromBackend = async () => {
+    try {
+      const nameAndEmailResponse = await getNameAndEmail();
+
+      setUser(nameAndEmailResponse.data);
+
+      // Save name and email to local storage
+      localStorage.setItem("inspiration_v2_user", JSON.stringify(nameAndEmailResponse.data));
+    } catch (err) {
+      handleAPIRequestError(err);
+    }
+  }
+
+  const getTasks = async () => {
+    try {
+      // If user is a guest, then get the tasks from local storage.
+      // If user is not a guest, then get the tasks from the database.
+      if (localStorage.getItem("inspiration_v2_auth_token") === "guest") {
+        // Get to-do list from local storage
+        let todoList = JSON.parse(localStorage.getItem("inspiration_v2_tasks"));
+
+        if (!todoList) {
+          todoList = [];
+          localStorage.setItem("inspiration_v2_tasks", JSON.stringify(todoList));
+        }
+
+        // Save to-do list to state
+        setTasks(todoList);
+      } else {
+        // Get to-do list from backend
+        const todoListResponse = await getTodoList();
+
+        // Save to-do list to state and local storage
+        setTasks(todoListResponse.data);
+        localStorage.setItem("inspiration_v2_tasks", JSON.stringify(todoListResponse.data));
+      }
+    } catch (err) {
+      handleAPIRequestError(err);
+    }
+  }
+
   const handleNameChange = async (newName) => {
     try {
       const oldUserObject = JSON.parse(localStorage.getItem("inspiration_v2_user"));
@@ -156,12 +143,7 @@ function App() {
 
       alert("Name changed successfully");
     } catch (err) {
-      // If the response property is defined, then there was an error with the server
-      if (err.response) {
-        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
-      } else {
-        alert(`ERROR: ${err}`);
-      }
+      handleAPIRequestError(err);
     }
   }
 
@@ -171,12 +153,7 @@ function App() {
 
       return true;
     } catch (err) {
-      // If the response property is defined, then there was an error with the server
-      if (err.response) {
-        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
-      } else {
-        alert(`ERROR: ${err}`);
-      }
+      handleAPIRequestError(err);
     }
   }
 
@@ -186,13 +163,16 @@ function App() {
 
       logOut();
     } catch (err) {
-      // If the response property is defined, then there was an error with the server
-      if (err.response) {
-        alert(`ERROR: Status ${err.response.status}\n${err.response.data}`);
-      } else {
-        alert(`ERROR: ${err}`);
-      }
+      handleAPIRequestError(err);
     }
+  }
+
+  const updateTasks = (newTasks) => {
+    // Update to-do list in state
+    setTasks(newTasks);
+
+    // Update to-do list in local storage
+    localStorage.setItem("inspiration_v2_tasks", JSON.stringify(newTasks));
   }
 
   useEffect(() => {
