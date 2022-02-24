@@ -7,12 +7,6 @@ const MainPage = ({ imageObject, quoteObject, user, tasks, updateTasks, handleNa
   const [name, setName] = useState(JSON.parse(localStorage.getItem("inspiration_v2_user")).name);
 
   useEffect(() => {
-    if (imageObject) {
-      document.body.style.backgroundImage = `url(${imageObject.imageUrl})`;
-    }
-  }, [imageObject]);
-
-  useEffect(() => {
     if (user && user.name) {
       setName(user.name);
     }

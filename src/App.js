@@ -209,6 +209,11 @@ function App() {
   }, [isLoggedIn]);
 
   useEffect(() => {
+    // When an image is received from the backend, set the background to that image
+    document.body.style.backgroundImage = `url(${imageObject.imageUrl})`;
+  }, [imageObject]);
+
+  useEffect(() => {
     getImageFromBackend();
     getQuoteFromBackend();
 
