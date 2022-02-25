@@ -10,6 +10,7 @@ import changeColor from './api/changeColor';
 import deleteAccount from './api/deleteAccount';
 import verifyDeleteAccount from './api/verifyDeleteAccount';
 import getTodoList from './api/getTodoList';
+import recommendQuote from './api/recommendQuote';
 import './App.css';
 
 function App() {
@@ -205,6 +206,16 @@ function App() {
     }
   }
 
+  const handleRecommendQuote = async (quote, author, recommender) => {
+    try {
+      await recommendQuote(quote, author, recommender);
+
+      alert("Quote added, thank you!");
+    } catch (err) {
+      handleAPIRequestError(err);
+    }
+  }
+
   const updateTasks = (newTasks) => {
     // Update to-do list in state
     setTasks(newTasks);
@@ -258,6 +269,7 @@ function App() {
             logOut={logOut}
             handleDeleteAccount={handleDeleteAccount}
             handleVerifyDeleteAccount={handleVerifyDeleteAccount}
+            handleRecommendQuote={handleRecommendQuote}
             handleAPIRequestError={handleAPIRequestError}
           />
           : <WelcomePage logIn={logIn} />

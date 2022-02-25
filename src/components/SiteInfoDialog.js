@@ -6,10 +6,33 @@ import {
   Typography,
   Divider,
   Link,
-  Button
+  Button,
+  Stack,
+  TextField
 } from "@mui/material";
+import { useState } from "react";
 
-const SiteInfoDialog = ({ open, setOpen, imageObject, quoteObject }) => {
+const SiteInfoDialog = ({ open, setOpen, imageObject, quoteObject, handleRecommendQuote }) => {
+  const [quote, setQuote] = useState("");
+  const [author, setAuthor] = useState("");
+  const [recommender, setRecommender] = useState("");
+
+  const handleQuoteInput = (event) => {
+    setQuote(event.target.value);
+  }
+
+  const handleAuthorInput = (event) => {
+    setAuthor(event.target.value);
+  }
+
+  const handleRecommenderInput = (event) => {
+    setRecommender(event.target.value);
+  }
+
+  const handleRecommendQuoteWrapper = () => {
+    handleRecommendQuote(quote, author, recommender);
+  }
+
   const handleCloseDialog = () => {
     setOpen(false);
   }
@@ -35,6 +58,7 @@ const SiteInfoDialog = ({ open, setOpen, imageObject, quoteObject }) => {
         <br/>
         <Typography variant="h5">Quote</Typography>
         <Typography><strong>Author:</strong> {quoteObject.author}</Typography>
+        {quoteObject.recommender && <Typography><strong>Recommender:</strong> {quoteObject.recommender}</Typography>}
         <br/>
         <Typography variant="h5">Developer</Typography>
         <Typography>
@@ -67,6 +91,42 @@ const SiteInfoDialog = ({ open, setOpen, imageObject, quoteObject }) => {
           {". See the backend code "}
           <Link underline="hover" href="https://github.com/Danpythonman/inspiration_v2_backend">here.</Link>
         </Typography>
+
+        <br/>
+
+        <Typography variant="h5">Have a quote to recommend?</Typography>
+        <Stack spacing={1}>
+          <TextField
+            fullWidth
+            variant="standard"
+            label="Quote"
+            value={quote}
+            onChange={handleQuoteInput}
+          />
+          <TextField
+            fullWidth
+            variant="standard"
+            label="Author"
+            value={author}
+            onChange={handleAuthorInput}
+          />
+          <TextField
+            fullWidth
+            variant="standard"
+            label="Your name as the recommender of this quote (optional)"
+            helperText={`If included, this name will appear in the "Info and Credit" section as the recommender of this quote`}
+            value={recommender}
+            onChange={handleRecommenderInput}
+          />
+          <Button
+            fullWidth
+            color="secondary"
+            variant="contained"
+            onClick={handleRecommendQuoteWrapper}
+          >
+            ADD QUOTE
+          </Button>
+        </Stack>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCloseDialog}>Close</Button>
