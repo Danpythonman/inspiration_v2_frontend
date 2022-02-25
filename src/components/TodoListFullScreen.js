@@ -1,5 +1,6 @@
 import {
   Dialog,
+  DialogTitle,
   DialogContent,
   DialogActions,
   AppBar,
@@ -9,10 +10,11 @@ import {
   Slide,
   Stack,
   TextField,
-  InputAdornment
+  InputAdornment,
+  Button
 } from "@mui/material";
-import { useState, forwardRef } from "react";
-import { Close, Add } from "@mui/icons-material";
+import { useState, useRef, forwardRef, useEffect } from "react";
+import { Close, Add, Settings } from "@mui/icons-material";
 import TodoListTask from "./TodoListTask";
 import addTask from "../api/addTask";
 import updateTask from "../api/updateTask";
@@ -23,11 +25,27 @@ const TodoListTransition = forwardRef((props, ref) => {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks, handleAPIRequestError }) => {
+const TodoListFullScreen = ({ open, setOpen, user, tasks, updateTasks, handleColorChange, handleAPIRequestError }) => {
   const [newTask, setNewTask] = useState("");
+  const [color, setColor] = useState("#2196F3");
+  const [colorDialogOpen, setColorDialogOpen] = useState(false);
+  const appBarRef = useRef(null);
 
   const closeTodoList = () => {
     setOpen(false);
+  }
+
+  const openColorDialog = () => {
+    setColorDialogOpen(true);
+  }
+
+  const closeColorDialog = () => {
+    appBarRef.current.style.backgroundColor = user.color;
+    setColorDialogOpen(false);
+  }
+
+  const changeColor = (event) => {
+    appBarRef.current.style.backgroundColor = event.target.value;
   }
 
   const handleNewTaskInput = (event) => {
@@ -38,6 +56,10 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks, handleAPIReques
     if (event.key === "Enter") {
       addTaskWrapper();
     }
+  }
+
+  const handleColorChangeWrapper = async () => {
+    handleColorChange(appBarRef.current.style.backgroundColor);
   }
 
   const addTaskWrapper = async () => {
@@ -123,6 +145,12 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks, handleAPIReques
     }
   }
 
+  useEffect(() => {
+    if (user && user.color) {
+      setColor(user.color);
+    }
+  }, [user]);
+
   return (
     <Dialog
       fullScreen
@@ -131,9 +159,22 @@ const TodoListFullScreen = ({ open, setOpen, tasks, updateTasks, handleAPIReques
       onClose={closeTodoList}
       TransitionComponent={TodoListTransition}
     >
-      <AppBar position="static">
+      <AppBar position="static" ref={appBarRef} style={{ backgroundColor: color }}>
         <Toolbar>
           <Typography sx={{ flex: 1 }} variant="h5">To-do List</Typography>
+          <IconButton onClick={openColorDialog}>
+            <Settings sx={{ color: "#FFFFFF" }} fontSize="large" />
+          </IconButton>
+          <Dialog open={colorDialogOpen} onClose={closeColorDialog}>
+            <DialogTitle>Pick To-Do List Colour</DialogTitle>
+            <DialogContent>
+              <input type="color" onChange={changeColor}/>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleColorChangeWrapper}>SAVE</Button>
+              <Button onClick={closeColorDialog}>CLOSE</Button>
+            </DialogActions>
+          </Dialog>
           <IconButton onClick={closeTodoList}>
             <Close fontSize="large" color="info" />
           </IconButton>

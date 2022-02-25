@@ -3,7 +3,7 @@ import TopAppBar from "./TopAppBar";
 import MessageDisplay from "./MessageDisplay";
 import BottomAppBar from "./BottomAppBar";
 
-const MainPage = ({ imageObject, quoteObject, user, tasks, updateTasks, handleNameChange, logOut, handleDeleteAccount, handleVerifyDeleteAccount, handleAPIRequestError }) => {
+const MainPage = ({ imageObject, quoteObject, user, tasks, updateTasks, handleColorChange, handleNameChange, logOut, handleDeleteAccount, handleVerifyDeleteAccount, handleAPIRequestError }) => {
   const [name, setName] = useState(JSON.parse(localStorage.getItem("inspiration_v2_user")).name);
 
   useEffect(() => {
@@ -28,10 +28,12 @@ const MainPage = ({ imageObject, quoteObject, user, tasks, updateTasks, handleNa
       />
 
       <BottomAppBar
+        user={user}
         tasks={tasks}
         updateTasks={updateTasks}
         imageObject={imageObject}
         quoteObject={quoteObject}
+        handleColorChange={handleColorChange}
         handleAPIRequestError={handleAPIRequestError}
       />
     </>

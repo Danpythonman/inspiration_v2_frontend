@@ -6,6 +6,7 @@ import getImage from './api/getImage';
 import getQuote from './api/getQuote';
 import getNameAndEmail from './api/getNameAndEmail';
 import changeName from './api/changeName';
+import changeColor from './api/changeColor';
 import deleteAccount from './api/deleteAccount';
 import verifyDeleteAccount from './api/verifyDeleteAccount';
 import getTodoList from './api/getTodoList';
@@ -145,7 +146,7 @@ function App() {
   const handleNameChange = async (newName) => {
     try {
       const oldUserObject = JSON.parse(localStorage.getItem("inspiration_v2_user"));
-      const newUserObject = { email: oldUserObject.email, name: newName };
+      const newUserObject = { ...oldUserObject, name: newName };
 
       // If user is logged in, send request to change name in backend
       if (oldUserObject.email) {
@@ -158,6 +159,27 @@ function App() {
       localStorage.setItem("inspiration_v2_user", JSON.stringify(newUserObject));
 
       alert("Name changed successfully");
+    } catch (err) {
+      handleAPIRequestError(err);
+    }
+  }
+
+  const handleColorChange = async (newColor) => {
+    try {
+      const oldUserObject = JSON.parse(localStorage.getItem("inspiration_v2_user"));
+      const newUserObject = { ...oldUserObject, color: newColor };
+
+      // If user is logged in, send request to change name in backend
+      if (oldUserObject.email) {
+        await changeColor(newColor);
+      }
+
+      setUser(newUserObject);
+
+      // Save name and email to local storage
+      localStorage.setItem("inspiration_v2_user", JSON.stringify(newUserObject));
+
+      alert("Color changed successfully");
     } catch (err) {
       handleAPIRequestError(err);
     }
@@ -231,6 +253,7 @@ function App() {
             user={user}
             tasks={tasks}
             updateTasks={updateTasks}
+            handleColorChange={handleColorChange}
             handleNameChange={handleNameChange}
             logOut={logOut}
             handleDeleteAccount={handleDeleteAccount}

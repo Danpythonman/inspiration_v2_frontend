@@ -7,7 +7,7 @@ import { useState } from "react";
 import TodoListFullScreen from "./TodoListFullScreen";
 import SiteInfoDialog from "./SiteInfoDialog";
 
-const BottomAppBar = ({ tasks, updateTasks, imageObject, quoteObject, handleAPIRequestError }) => {
+const BottomAppBar = ({ user, tasks, updateTasks, imageObject, quoteObject, handleColorChange, handleAPIRequestError }) => {
   const [todoListOpen, setTodoListOpen] = useState(false);
   const [siteInfoDialogOpen, setSiteInfoDialogOpen] = useState(false);
 
@@ -43,8 +43,10 @@ const BottomAppBar = ({ tasks, updateTasks, imageObject, quoteObject, handleAPIR
       <TodoListFullScreen
         open={todoListOpen}
         setOpen={setTodoListOpen}
+        user={user}
         tasks={tasks}
         updateTasks={updateTasks}
+        handleColorChange={handleColorChange}
         handleAPIRequestError={handleAPIRequestError}
       />
       <SiteInfoDialog
